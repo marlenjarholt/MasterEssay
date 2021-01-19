@@ -1,20 +1,42 @@
-\documentclass[12pt, a4paper]{report}
-
-\usepackage{style} %custum style
+\documentclass[11pt, a4paper, english]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc,url}
+\usepackage[english]{babel}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{placeins}
 \usepackage{frontpage/ifikompendiumforside}
+\usepackage{url}
+\usepackage[backend=biber]{biblatex}
+\usepackage{hyperref}
+\usepackage{csquotes}
 
 
-%\addbibresource{bibliography.bib}
+
+\addbibresource{bibliography.bib}
 
 \title{Frog: Functions for ontologies}
 \subtitle{An Essay}
 \author{Marlen Jarholt}
 \date{19.01.2021} %endre naar ferdig
 
+
 \begin{document}
 
 \ififorside
 
-%\printbibliography
+\clearpage
+
+\tableofcontents
+
+\clearpage
+
+\input{sections/introduction.tex}
+
+
+\printbibliography
 
 \end{document}
