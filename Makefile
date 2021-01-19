@@ -1,3 +1,4 @@
+#insperation: https://github.com/eivindbergem/uio-master-thesis-latex-template/blob/master/Makefile
 srcfile = master
 pdf = $(srcfile).pdf
 dir = src
@@ -5,13 +6,8 @@ bib = bibliography.bib
 
 all: $(pdf)
 
-$(pdf): $(src)/$(srcfile).txt/$(bib)
-	cd $(src)
-	latexmk -pdf -use-make $(srcfile)
-	mv $(pdf) ..
+$(pdf): $(dir)/$(srcfile).tex $(dir)/$(bib)
+	cd $(dir) && latexmk -pdf -use-make $(srcfile).tex && mv $(pdf) ..
 
 clean:
-	rm $(pdf)
-	cd $(src)
-	latexmk -CA 
-	rm $(srcfile).bbl $(srcfile).run.xml
+	rm $(pdf) && cd $(dir) && latexmk -CA  && rm $(srcfile).bbl $(srcfile).run.xml
