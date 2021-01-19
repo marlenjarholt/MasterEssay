@@ -6,3 +6,7 @@
 *.run.xml
 *.toc
 *.synctex.gz
+*.pdf
+*.out
+*.bbl
+*.blg
