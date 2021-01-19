@@ -1,8 +1,6 @@
 # Master essay Marlen Jarholt
 
-### Run makefile 
-To create PDF, run:
-
+### Run makefile
 To create PDF, run:
 ```
 make
