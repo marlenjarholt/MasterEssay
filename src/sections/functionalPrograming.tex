@@ -38,7 +38,7 @@ With the $\alpha$-reduction in mind, \textbf{$\alpha$-conversion} is that you ch
 
 \subsubsection{$\beta$-reduction}
 $\beta$-reduction is a way to reduce terms. You do this by sending in argument(s) for the bound variables. E.g. if we want the reduce the lambda term $\lambda x. x s$ we can $\lambda x. x$  $s \rightarrow _\beta s$ (this is the identity function, which gives us back the argument we gave to the function). You can do $\beta$-reduction in several rounds, when there are no more possible $\beta$-reductions we say that the term has reached the $\beta$-normal form. Figure 2: \nameref{fig:beta-reduction} shows an example on $\beta$-reduction with a $\lambda$-term of one of the arguments. \\ \\
-If the term stays the same after one $\beta$-reduction, then the term never will terminate. An example of a term that doesn't terminate wail using $\beta$-reduction is the self-application function ($\lambda f.ff$)
+If the term stays the same after one $\beta$-reduction, then the term never will terminate. An example of a term that doesn't terminate wail using $\beta$-reduction is the self-application function applyed on itself $(\lambda f.ff) \lambda f.ff$
 
 \paragraph{Complexity}
 $\beta$-reduction is not an atomic step, this means that one most locate all the occurrence of a bound variable in a term, which can be very time consuming. In O-notation this will take $O(n)$ time for a term of length n. On way to this is to store this value some place, this may become very space costly. 
@@ -52,16 +52,39 @@ $\beta$-reduction is not an atomic step, this means that one most locate all the
 
 \subsubsection{$\eta$-reduction}
 $\eta$-reduction is the idea that two functions are equal if and only if they returns the same result for any given argument.
+An example of $\eta$-reduction $(\lambda x.f) x \rightarrow_\eta f$, we can do this because the two functions will return the samething
+for the same argument.
 
 \subsection{Type Theory}
 \label{Type Theory}
 
-Type theory is the academic study of \textbf{type systems}, which gives every term a type. This type chooses what operations that can be done on the term, as well as the meaning of it. \nameref{Lambda Calculus} has it's own type system, also made by Alonzo Church called \nameref{Simply Typed Lambda Calculus}. \\ \\
-\textbf{A term} often followed by a : and then the type of the term. \textbf{A type} in a type system is often collection of different values that a term can be evaluated to. Therefore, there are many similarities between type systems and set theory, eventhrough they have their differences. So a term $e$ ($e$ is often use to denote a term) is of type $\tau$ ($\tau$ is often use to denote a type) if $e \in \tau$. E.g. 2 is of type $\mathbb{N}$ (natural numbers) because $2 \in \mathbb{N}$. Often terms and types are made depending on their type system which we will come back to when we talk abut \nameref{Simply Typed Lambda Calculus}. \\ \\
-$\Upgamma \vdash e:\tau$ is the denotation of a judgment. Where $\Upgamma$ is the denotation that usually is used for an context or environment. A terms typed is determinate using the judgment and equivalences type inference rules.
+Type theory is the academic study of \textbf{type systems}, 
+which gives every term a type. This type chooses what operations 
+that can be done on the term, as well as the meaning of it. 
+\nameref{Lambda Calculus} has it's own type system, also made 
+by Alonzo Church called \nameref{Simply Typed Lambda Calculus}.
+The goal of Type Theory is to make sure that a term allways terminates.
+\textbf(TODO: LEGGE TIL HVORFOR) \\ \\
+\textbf{A term} often followed by a : and then the type of the term.
+\textbf{A type} in a type system is semantically often collection of different
+values that a term can be evaluated to. Therefore, there are many 
+similarities between type systems and set theory, eventhrough they 
+have their differences. Futher more the name of a given term is the syntactic, 
+for exampel in java we have the type that  is a collection of all Integers ($\mathbb{Z}$) (semantic) 
+and has the name int (syntactic).
+So a term $e$ ($e$ is often use to denote a term) is of type 
+$\tau$ ($\tau$ is often use to denote a type) if $e \in \tau$. 
+E.g. 2 is of type $\mathbb{N}$ (natural numbers) because 
+$2 \in \mathbb{N}$. Often terms and types are made depending on their 
+type system which we will come back to when we talk abut 
+\nameref{Simply Typed Lambda Calculus}. \\ \\
+$\Upgamma \vdash e:\tau$ is the denotation of a judgment. 
+Where $\Upgamma$ is the denotation that usually is used for an 
+context or environment. A terms typed is determinate using the 
+judgment and equivalences type inference rules.
 
 \subsubsection{Decision problems}
-\textbf{(Note: hentet dirkete virker rart å skrive disse med egene ord).} \\ \\
+
 Type theory uses type checking, typebility and type inhabitation as decisions problems. \\ \\
 The decision problem of \textbf{checking} (abbreviated by ($\Upgamma\vdash e : \tau$?) is:\\
 \textit{Given a type environment $\Upgamma$, a term $e$, and a type $\tau$, decide whether the term $e$ can be assigned the type $\tau$ in the type environment $\Upgamma$} \\ \\
@@ -72,9 +95,18 @@ The decision problem of type \textbf{inhabitation} (abbreviated by ($ \exists e.
 
 \subsection{Simply Typed Lambda Calculus}
 \label{Simply Typed Lambda Calculus}
-As earlier mention in the section about \nameref{Type Theory}, Simply Typed Lambda Calculus ($\lambda^\rightarrow$) is an Type Theory developed by Alonzo Church for $\lambda$-calculus. \\ \\
-In $\lambda^\rightarrow$ we can make types with only on operator $\rightarrow$ and a set of base types, often denoted with $B$. From the base types, $B$, we can construct new types using our operator $\rightarrow$. If we have the two base types $\tau$ and $\sigma$ we can construct a new type $\tau \rightarrow \sigma$, this type that we now just made would refer to a function that takes in an argument of type $\tau$ and returns a term of type $\sigma$. \\ \\
-The syntax for $\lambda^\rightarrow$ are more or less equal to \nameref{Lambda Calculus}s syntax. Except that we need to specify the type of an variable in the function (in the abstraction), this is done in the way that was described in \nameref{Type Theory} with $x_\tau$ for an variable $x$ with type $\tau$. In addition Simply type lambda calculus also adds a term constant $c$. The full syntax for Simply Typed Lambda Calculus is shown in the table \nameref{tab:STLC syntax} \\
+As earlier mention in the section about \nameref{Type Theory}, Simply Typed Lambda Calculus 
+($\lambda^\rightarrow$) is an Type Theory developed by Alonzo Church for $\lambda$-calculus. \\ \\
+In $\lambda^\rightarrow$ we can make types with only on operator $\rightarrow$ and a set of base types,
+ often denoted with $B$. From the base types, $B$, we can construct new types using our operator 
+ $\rightarrow$. If we have the two base types $\tau$ and $\sigma$ we can construct a new 
+ type $\tau \rightarrow \sigma$, this type that we now just made would refer to a function 
+ that takes in an argument of type $\tau$ and returns a term of type $\sigma$. \\ \\
+The syntax for $\lambda^\rightarrow$ are more or less equal to \nameref{Lambda Calculus}s syntax. 
+Except that we need to specify the type of an variable in the function (in the abstraction), 
+this is done in the way that was described in \nameref{Type Theory} with $x:\tau$ for an variable $x$ with 
+type $\tau$. In addition Simply type lambda calculus also adds a term constant $c$. The full syntax for 
+Simply Typed Lambda Calculus is shown in the table \nameref{tab:STLC syntax} \\
 
 \begin{table}[]
     \centering
@@ -94,9 +126,41 @@ In Simply Typed Lambda Calculus we have four typing rules. To state this rules w
 \begin{enumerate}
     \item If we have variable $x$ that is of type $\tau$ in the typing environment $\Upgamma$, then we know that $x$ has type $\tau$.
     \item If we have a constant $c$ of type $T$ in the typing environment $\Upgamma$, then we know that $c$ has type $T$.
-    \item If we have a variable $x$ that is of type $\tau$ in an type environment, and with an term $e$ of type $\sigma$ in the same type environment, then we have a term $\lambda x\tau .e$ with the type $\tau \rightarrow \sigma$ in the same type environment.
+    \item If we have a variable $x$ that is of type $\tau$ in a type environment, and with a term $e$ of type $\sigma$ in the same type environment, then we have a term $\lambda x\tau .e$ with the type $\tau \rightarrow \sigma$ in the same type environment.
     \item If we have a term $M$ of type $\tau \rightarrow \sigma$ and a term $N$ of type $\tau$ in an typing environment, then $M N$ will have the type $\tau$ in the same typing environment.
 \end{enumerate}
 
 \subsubsection{Reduction of Simply Typed Lambda Calculus}
-Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as mention in the section in about \nameref{Lambda Calculus}, but we need to check that the arguments to the function has the right type in typing environment as well. 
+Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as mention in the 
+section in about \nameref{Lambda Calculus}, but we need to check that the arguments to the function has 
+the right type in typing environment as well. 
+
+\subsection{Evaluation strategies}
+An evaluation strategie is an stratagie that is used in programming languages to decide when
+an expression should be evaluated. E.g should we evaluate the the arguments before the function, and send in 
+the evaluated values as argumments as values, or should we should we just send the whole expression as an argumment 
+and evaluate it later. Furthermore it has two main branches \textbf{eger evaluation} (strict evaluation) and \textbf{non-strict evaluation}, to explain briefly 
+eger evaluation will evaluate the expression at soon as it is bound, considering the example given earlier eger evaluation whould evaluate every 
+argument before it starts the function. Non-strict evaluation on the other hand evaluates the expression when it's
+first used. This means that if you have a function that takes an argument that is never used eger evaluation will evaluate it while 
+non-strict evaluation wouldn't. Non-strict evaluation can also have infinit list, since only the element in the list which are used are 
+calculated, infinit list is also known as streams. 
+\\ \\
+Most Imperative programming languages uses an eger evalutation. In imperative languages the order of how the code is 
+executeted is determined by the structur ande the order of code itself. The reason we eager evaluation is the most popular 
+evaluation strategie in imperative programming languages is because it easier to avoid unexepted behavoir.  In addition to being eaiser to 
+debug compared with non-strict evalutation. One can also have some diffuclites when it trying to use imperative features like I/O and exception handling 
+when using a non-strict evaluation strategie. Even though most imperative languages is writen using eger evalutation it still have some non-strict evaluation element in it. 
+A good exampel of this is the if-statment where the most languages only will evaluate the one part of the if-statment that is true. If we have $if\; a\; then\; b\; else\; c$, then b only 
+will evaluated if a is evaluates to be true, and c on the other hand wil only be evaluated if a is evaluated to be false. But if we put this if-statment in a function and use $a$, $b$ and
+$c$ as arguments like this $f(a, b ,c):= \; if\; a\; then\; b\; else\; c$ then eger evaluation will evaluate all the expressions before the functions starts even though we 
+know we only need either $b$ or $c$ while non-strict evaluation only whould evaluate the expression that is used.
+\\ \\
+\textbf{Lazy evaluation} (also know as call-by-need) is a subbranch 
+of non-strict evaluation and often used in Functional programming. Since Lazy evaluation is a subbranch of non-strict it evaluates 
+the expression when it is used. What seperating lazy evaluation from the other types of non-strict evaluation such as call-by-name
+is that Lazy evalutation also use memorization to avoid repeated evaluations, ruducing the running time. Memorization is done by using a 
+look-up table where you store the value of what a function for a some given arguments evaluates to. When you then whant to evaluate a 
+function with som arguments you first check if it allready exists in the look-up table, if the value exists you can retrive it form the table, on the 
+other hand if doesn't exist you evaluate the function to a value and add this value to the table.
+\textbf{Graph reductuion} is an efficant technique for implementing lazy evaluation using the outermost tree reduction method.
