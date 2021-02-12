@@ -51,9 +51,9 @@ $\beta$-reduction is not an atomic step, this means that one most locate all the
 \end{figure}
 
 \subsubsection{$\eta$-reduction}
-$\eta$-reduction is the idea that two functions are equal if and only if they returns the same result for any given argument.
-An example of $\eta$-reduction $(\lambda x.f) x \rightarrow_\eta f$, we can do this because the two functions will return the samething
-for the same argument.
+$\eta$-reduction is the idea that two functions are equal if and only if they returns the same result for 
+any given argument. An example of $\eta$-reduction is $(\lambda x.f x)  \rightarrow_\eta f$, whenever $x$ is not 
+a free variable in $f$.
 
 \subsection{Type Theory}
 \label{Type Theory}
@@ -63,8 +63,7 @@ which gives every term a type. This type chooses what operations
 that can be done on the term, as well as the meaning of it. 
 \nameref{Lambda Calculus} has it's own type system, also made 
 by Alonzo Church called \nameref{Simply Typed Lambda Calculus}.
-The goal of Type Theory is to make sure that a term allways terminates.
-\textbf(TODO: LEGGE TIL HVORFOR) \\ \\
+\\ \\
 \textbf{A term} often followed by a : and then the type of the term.
 \textbf{A type} in a type system is semantically often collection of different
 values that a term can be evaluated to. Therefore, there are many 
@@ -76,8 +75,15 @@ So a term $e$ ($e$ is often use to denote a term) is of type
 $\tau$ ($\tau$ is often use to denote a type) if $e \in \tau$. 
 E.g. 2 is of type $\mathbb{N}$ (natural numbers) because 
 $2 \in \mathbb{N}$. Often terms and types are made depending on their 
-type system which we will come back to when we talk abut 
-\nameref{Simply Typed Lambda Calculus}. \\ \\
+type system which we will come back to when we talk about 
+\\ \\
+If we know that a term has type we also know something valuable about that term namely that it will terminate.
+That is because as previous mention a type symentically is a collection of values that the term can evaluate to. 
+So if we know what the type of the type is we also know the term will evaluate to on of the values in the collection, and
+from that we know that it will termenate. And this is one of the goals with Type systems, to make sure that the 
+terms allways will terminate. 
+\nameref{Simply Typed Lambda Calculus}. 
+\\ \\
 $\Upgamma \vdash e:\tau$ is the denotation of a judgment. 
 Where $\Upgamma$ is the denotation that usually is used for an 
 context or environment. A terms typed is determinate using the 
