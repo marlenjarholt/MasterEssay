@@ -33,8 +33,22 @@ To further elaborate you can state that if you have a term which consist of the 
 
 \subsubsection{$\alpha$-conversion}
 
-First of it is nice to mention what \textbf{$\alpha$ equivalence} is. It basically means that that two lambda terms are alpha-equivalent if the one difference in the terms has the variables names. E.g $\lambda ab.ab$ is alpha-equivalent to the lambda term $\lambda xy.xy$ \\ \\
-With the $\alpha$-reduction in mind, \textbf{$\alpha$-conversion} is that you change the name of the variable in the $\lambda$ part and in the body so that the new term is $alpha$ equivalent to the old term. E.g on $\alpha$-conversion of $\lambda ab.ab$ is $\lambda xy.xy$ since this are $alpha$ equivalent. Bear in mind that you're not allowed to rename the variable to a name of another variable in the term. This because the two terms won't be $alpha$ equivalent.
+First of it is nice to mention what \textbf{$\alpha$ equivalence} is. It basically means that that two lambda terms are alpha-equivalent if the one 
+difference in the terms has the variables names. E.g $\lambda ab.ab$ is alpha-equivalent to the lambda term $\lambda xy.xy$ 
+\\ \\
+With the $\alpha$-reduction in mind, \textbf{$\alpha$-conversion} is that you change the name of the variable in the $\lambda$ part 
+and in the body so that the new term is $alpha$ equivalent to the old term. E.g on $\alpha$-conversion of $\lambda ab.ab$ is $\lambda xy.xy$ 
+since this are $alpha$ equivalent. Bear in mind that you're not allowed to rename the variable to a name of another variable in the term. 
+This because the two terms won't be $alpha$ equivalent.
+
+\paragraph{$\alpha$-conversion exampels}. As we have allready mention when doing $\alpha$-conversion we can only change the names of the variables in the term, so that 
+the term dosen't change. E.g. $\lambda x.x \rightarrow_\alpha \lambda y.y$ since we haven't change the meaning of the term. So the reuslt of sending in any value/term 
+$e$ will give ous the same reutrn value, in this case just $e$ itself. An exampel of what isn't allowed to do is this $\lambda x.xy \rightarrow_\alpha \lambda y.yy$. This is 
+because this terms will give us different return values for an arguemnt. Lets try with $e$ again, then we would se that  $\lambda x.xy e$ would give us $ey$ while 
+$\lambda y.yy e$ whould give us $ee$, and $ey \neq ee$. So the term $\lambda x.xy$ is $\alpha$-equivalent to all terms where we change to $x$ to any thing except $y$. 
+More general we can change any variable name to anything except the set of variables in the function body. Therefore $\lambda x.xy \rightarrow_\alpha \lambda z.zy$.
+In addition we need make sure that vi only change the variables that are in the same abstraction. So the term $\lambda x.\lambda x.x $ is not $\alpha$-equivalent to the 
+term $\lambda y.\lambda x.y$, but to for exampel the terms $\lambda y.\lambda x.x$ or $\lambda x.\lambda y.y$
 
 \subsubsection{$\beta$-reduction}
 $\beta$-reduction is a way to reduce terms. You do this by sending in argument(s) for the bound variables. E.g. if we want the reduce the lambda term $\lambda x. x s$ we can $\lambda x. x$  $s \rightarrow _\beta s$ (this is the identity function, which gives us back the argument we gave to the function). You can do $\beta$-reduction in several rounds, when there are no more possible $\beta$-reductions we say that the term has reached the $\beta$-normal form. Figure 2: \nameref{fig:beta-reduction} shows an example on $\beta$-reduction with a $\lambda$-term of one of the arguments. \\ \\
@@ -57,7 +71,6 @@ a free variable in $f$.
 
 \subsection{Type Theory}
 \label{Type Theory}
-
 Type theory is the academic study of \textbf{type systems}, 
 which gives every term a type. This type chooses what operations 
 that can be done on the term, as well as the meaning of it. 
@@ -127,7 +140,8 @@ Simply Typed Lambda Calculus is shown in the table \nameref{tab:STLC syntax} \\
 \end{table}
 
 \subsubsection{Typing rules}
-In Simply Typed Lambda Calculus we have four typing rules. To state this rules we need to take with us the typing environment that was described in the section about \nameref{Type Theory}.
+In Simply Typed Lambda Calculus we have four typing rules. To state this rules we need to take with us the typing environment that was described in the section 
+about \nameref{Type Theory}.
 
 \begin{enumerate}
     \item If we have variable $x$ that is of type $\tau$ in the typing environment $\Upgamma$, then we know that $x$ has type $\tau$.
@@ -140,6 +154,24 @@ In Simply Typed Lambda Calculus we have four typing rules. To state this rules w
 Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as mention in the 
 section in about \nameref{Lambda Calculus}, but we need to check that the arguments to the function has 
 the right type in typing environment as well. 
+\\ \\
+To give an example of this we first need to make a set of the base types, in this case we wil only use $Int$, which is the name for the collection of all 
+naturla numbers, as the only base type. From this one type we can make an infinity of types ($Int, Int \rightarrow Int, Int \rightarrow Int \rightarrow Int ....$).
+In addtion we will add the operation $+$ that adds to numbers together.
+We will use the term $e_1:= \lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int$, the type $Int \rightarrow Int \rightarrow Int$ in writing would be "a term
+which takes in an Int and returns a term which takes in an Int and returns an Int". 
+So if we know apply the term $e_2 := 3:Int$ on $e_1$, $e_1 e_2$ from the third type rule we se that this the term 
+$e_1 e_2$ should have the type $Int \rightarrow Int$. To show this let us use $\beta$-reduction on the terms.
+\\ \\
+$e_1 e_2 := \lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int\; 3:Int 
+\newline\rightarrow_\beta \lambda y:Int. + 3\; y: Int \rightarrow Int$
+\\ \\
+So the term we that $e_1 e_2 $ now is a term which takes in a $Int$ and returns an $Int$. If we apply another term
+$e_3 := 7:Int$ on the term $e_1 e_2:Int \rightarrow Int$ we get the term $e_1 e_2 e_3:Int$ from the third typing rule.
+The $\beta$ reduction also shows this: 
+\\ \\
+$e_1 e_2 e_3 := \lambda y:Int. + 3\; y: Int \rightarrow Int \; 7:Int
+\newline \rightarrow_\beta + 3:int \; 7:Int = 10$
 
 \subsection{Evaluation strategies}
 An evaluation strategie is an stratagie that is used in programming languages to decide when
@@ -170,3 +202,24 @@ look-up table where you store the value of what a function for a some given argu
 function with som arguments you first check if it allready exists in the look-up table, if the value exists you can retrive it form the table, on the 
 other hand if doesn't exist you evaluate the function to a value and add this value to the table.
 \textbf{Graph reductuion} is an efficant technique for implementing lazy evaluation using the outermost tree reduction method.
+\\ \\
+In figure \nameref{fig:strictVSLazy} we se an exampel of strict evaluation and lazy evaluation with $\beta$-reduction, with the 
+assumtion that print is a term which prints the argument to the terminal, and that + - and * are operators that works on integers.
+There are some differences that are important to note:
+
+\begin{itemize}
+    \item In strict evaluateion we evaluate a as soon as its bond, will we don't do it in lazy evaluation.
+    \item In strict evaluation we evaluate the terms before sending them in while we in lazy evaluation send in the whole term
+    ref. $(\lambda x.\lambda y. - x y)\; 4 \; 2$. Since we never uses the $y$ anywhere in the function body the result is that 
+    in strict evaluation ends up evaluating something that never is used.
+    \item On the last to lines on the Lazy Evaluation we can se that we have used memorization and the lookup table to get
+    the return value, instead of calculating it twice.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.25]{strictVSLazy.png}
+    \caption{Shows the diffetence between strict evaluation and lazy evaluation. Here we assum that print is a term which 
+    prints the argument to the terminal, and that + - and * are operators that works on integers}
+    \label{fig:strictVSLazy}
+\end{figure}
