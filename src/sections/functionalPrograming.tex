@@ -88,19 +88,33 @@ So a term $e$ ($e$ is often use to denote a term) is of type
 $\tau$ ($\tau$ is often use to denote a type) if $e \in \tau$. 
 E.g. 2 is of type $\mathbb{N}$ (natural numbers) because 
 $2 \in \mathbb{N}$. Often terms and types are made depending on their 
-type system which we will come back to when we talk about 
-\\ \\
-If we know that a term has type we also know something valuable about that term namely that it will terminate.
-That is because as previous mention a type symentically is a collection of values that the term can evaluate to. 
-So if we know what the type of the type is we also know the term will evaluate to on of the values in the collection, and
-from that we know that it will termenate. And this is one of the goals with Type systems, to make sure that the 
-terms allways will terminate. 
-\nameref{Simply Typed Lambda Calculus}. 
-\\ \\
+type system which we will come back to when we talk about \nameref{Simply Typed Lambda Calculus}
 $\Upgamma \vdash e:\tau$ is the denotation of a judgment. 
 Where $\Upgamma$ is the denotation that usually is used for an 
 context or environment. A terms typed is determinate using the 
-judgment and equivalences type inference rules.
+judgment and equivalences type inference rules. 
+\\ \\
+Many of the programming languages either requiere that all expressions terminate (e.g. Coq) or alow 
+infinitete loops but are inconsistent when viewed as logics (e.g. Haskel) \textbf{(src: http://www.tyconmismatch.com/papers/combining-TR.pdf)}.
+Therefore in some programaing languages, like \nameref{Simply Typed Lambda Calculus}, one of the type systems goals 
+is to make sure that a term terminates. 
+\\ \\
+Many type systems have \textbf{inductive types}. Among other things this means that we have a set of base types
+and a set of type constructors that again can generate new types. So if we have the base typee $\sigma$ , 
+and two opertions $*$ and $\#$ and with the types $M$ and $N$ (what they mean are not important for this exampel) 
+then we can make a new type $T$ in the ways in \nameref{tab:inductive types} 
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c c c}
+         $T :=$&  & $\sigma$\\
+         & $|$ & $M * N$ \\
+         & $|$ & $M \# N$ \\
+    \end{tabular}
+    \caption{Example of how to build up inductive types}
+    \label{tab:inductive types}
+\end{table}
+
 
 \subsubsection{Decision problems}
 
@@ -140,8 +154,8 @@ Simply Typed Lambda Calculus is shown in the table \nameref{tab:STLC syntax} \\
 \end{table}
 
 \subsubsection{Typing rules}
-In Simply Typed Lambda Calculus we have four typing rules. To state this rules we need to take with us the typing environment that was described in the section 
-about \nameref{Type Theory}.
+In Simply Typed Lambda Calculus we have four typing rules. To state this rules we need to take with us the typing environment 
+that was described in the section about \nameref{Type Theory}.
 
 \begin{enumerate}
     \item If we have variable $x$ that is of type $\tau$ in the typing environment $\Upgamma$, then we know that $x$ has type $\tau$.
