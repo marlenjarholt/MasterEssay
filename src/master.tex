@@ -17,6 +17,7 @@
 \graphicspath{{figures/}}
 \usepackage{amssymb}
 \usepackage{ upgreek }
+\usepackage{listings} 
 
 
 
@@ -27,6 +28,21 @@
 \author{Marlen Jarholt}
 \date{19.01.2021} %endre naar ferdig
 
+
+\lstdefinelanguage{turtle}
+{
+    columns=fullflexible,
+    keywordstyle=\color{red},
+    morekeywords={@prefix,@base,@forSome,@forAll,@keywords},
+    morecomment=[l]{\#},
+    tabsize=4,
+    alsoletter={-?}, % allowed in names
+    morecomment=[s][\color{blue}]{<}{>},
+    basicstyle=\ttfamily\color{black},
+    %numberstyle=\color{black},
+    morestring=[b][\color{black}]\",
+    backgroundcolor=\color{white},
+}
 
 \begin{document}
 
@@ -39,7 +55,7 @@
 \clearpage
 
 \input{sections/functionalPrograming.tex}
-
+\input{sections/SemanticWebAndRDF.tex}
 
 \printbibliography
 
