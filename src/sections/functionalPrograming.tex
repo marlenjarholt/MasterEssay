@@ -69,6 +69,96 @@ $\eta$-reduction is the idea that two functions are equal if and only if they re
 any given argument. An example of $\eta$-reduction is $(\lambda x.f x)  \rightarrow_\eta f$, whenever $x$ is not 
 a free variable in $f$.
 
+\subsubsection{Combinatoric logic}
+Combinatoric logic in computer science is a theoretical method of computation. The point is that you only have some base function
+applications to create new high-order functions, from now on these function will be called primitive functions. These primitive functions
+combined in the right order can then express any other high-order function.  
+Compinatoric logic is often looked as as an variant of $\lambda$-calculus, where 
+we replace the lambda expressions with a limited set of primitive functions that dosen't have any free variables. In compinatoric logic
+we hvae three primitive functions \textbf{I}, \textbf{K} and \textbf{S}.\\
+Where \textbf{I} is the identity function, defined by: \\ 
+\begin{center}
+    $(I x) = x$\\    
+\end{center}
+In $\lambda$-calculus the \textbf{I} function would look like this:\\
+\begin{center}
+    $\lambda x.x$\\    
+\end{center}
+Futhermore we have the \textbf{K} which is a function that takes in two arguments and always returns the first argument, defined by:
+\begin{center}
+    $ ((K x) y) = x$ or $(K x y) = x$\\    
+\end{center}
+In $\lambda$-calculus the \textbf{K} function would look like this:\\
+\begin{center}
+    $\lambda xy.x$\\    
+\end{center}
+Lastly we have the primitive function \textbf{S}, which takes in three arguments and apply the last on on the two first:
+\begin{center}
+    $ (S x y z) = (x z (y z))$\\    
+\end{center}
+In $\lambda$-calculus the \textbf{S} function would look like this:\\
+\begin{center}
+    $\lambda xyz.xz(yz)$\\    
+\end{center}
+From these primitive functions and from a $x$, which represent a variable,  we can build up combinatoric terms as shown in \nameref{tab:makeCombinatoricTerms} 
+almost in the same way that we build up different terms in $\lambda$-calculs. The difference is that in combinatoric logic we have a limited set 
+primitive functions instead of the abstraction in $\lambda$-calculus.
+\\ \\
+\begin{table}[]
+    \centering
+    \begin{tabular}{c c c | c}
+         $E :=$&  & $x$ & (variable)\\
+         & $|$ & $P$ & (the primitive functions) \\
+         & $|$ & $E_1 E_1$ & (application, where $E_1$ and $E_2$ are combinatoric terms)\\
+    \end{tabular}
+    \caption{How to build up combinatoric terms}
+    \label{tab:makeCombinatoricTerms}
+\end{table}
+We want to be able to convert a lambda term to an equivalient combinator, this is done by the use of $T[]$ which is 
+defined by the following rules:
+
+\begin{enumerate}
+    \item $T[x] \Rightarrow x$
+    \item $T[(E_1 E_2)] \Rightarrow (T[E_1]\; T[E_2])$
+    \item $T[\lambda x.E] \Rightarrow (\textbf{K}\; T[E])$ (if x dosen't occure free in E)
+    \item $T[\lambda x.x]\Rightarrow \textbf{I}$
+    \item $T[\lambda x. \lambda y.E]\Rightarrow T[\lambda x.T[\lambda y.E]]$ (if x occures free in E)
+    \item $T[\lambda x.(E_1 E_2)] \Rightarrow (\textbf{S} \; T[\lambda x.E_1] \; T[\lambda x.E_2])$
+\end{enumerate}
+T[] is not a well-typed mathematical function, but a rewriter. The result of this is that if we are not complete with
+the transelation from a lambda term to a combinatoric term we will end up with something that is neither a lambda term
+or combinatoric term. 
+\\ \\
+The following will give an example of how to change the expression $\lambda x.\lambda y.xy$ from \nameref{fig:beta-reduction}.
+We have make one shortecut show that the caculation dosn't take unnecessary long time. The shortcut is that we combine rule 3 and 1 (will be written $3/1$ in the exampel).
+So if we e.g. have $T[\lambda x.y]$ we will write $T[\lambda x.y] =_{3/1} (\textbf{K } y)$ instead of $T[\lambda x.y] =_{3} (\textbf{K } T[y]) =_{1} (\textbf{K } y)$.
+\begin{quote}
+    $\lambda x.\lambda y.xy$ \\
+    $=_5 T[\lambda x.T[\lambda y.(xy)]]$
+    $=_6 T[\lambda x. (\textbf{S}\; T[\lambda y.x]\; T.[\lambda y.y])]$ \\
+    $=_{3/1} T[\lambda x. (\textbf{S}\;(\textbf{K}\; x) \; T.[\lambda y.y])]$ \\  
+    $=_4 T[\lambda x. (\textbf{S}\;(\textbf{K}\; x) \; \textbf{I})]$ \\
+    $=_6 (\textbf{S} \; T.[\lambda x.(\textbf{S}\;(\textbf{K}\; x))] \; T.[\lambda x.I])$ \\
+    $=_{3/1} (\textbf{S} \; T.[\lambda x.(\textbf{S}\;(\textbf{K}\; x))] \; (\textbf{K I}))$ \\
+    $=_{6} (\textbf{S} \; (\textbf{S} \; T[\lambda x.\textbf{S}] \; T[\lambda x.(\textbf{K} \; x)]) \; (\textbf{K I}))$ \\
+    $=_{3/1} (\textbf{S} \; (\textbf{S} \; (\textbf{K S}) \; T[\lambda x.(\textbf{K} \; x)]) \; (\textbf{K I}))$ \\
+    $=_{6} (\textbf{S} \; (\textbf{S} \; (\textbf{K S}) \; (\textbf{S} \; T.[\lambda x.\textbf{K}] \; T.[\lambda x.\textbf{x}]) ) \; (\textbf{K I}))$ \\
+    $=_{3/1} (\textbf{S} \; (\textbf{S} \; (\textbf{K S}) \; (\textbf{S} \; (\textbf{K K}) \; T.[\lambda x.\textbf{x}]) ) \; (\textbf{K I}))$ \\
+    $=_4 (\textbf{S} \; (\textbf{S} \; (\textbf{K S}) \; (\textbf{S} \; (\textbf{K K}) \; \textbf{I}) ) \; (\textbf{K I}))$ \\      
+\end{quote}
+It's normal to add the combinatoric term \textbf{B} ($(\textbf{C} f g x) = ((f x )g)$) and \textbf{C} ($(\textbf{C} f g x) = (f (x g))$). Where \textbf{C} only performes the substitution on 
+the the first term and \textbf{B} on the seconde term, compared with \textbf{S} which perform the substitution on both terms.
+We can now add these two rules to $T[]$
+\begin{enumerate}
+    \setcounter{enumi}{6}
+    \item $T[\lambda x.(E_1 E_2)] \Rightarrow (\textbf{C} \; T[\lambda x.E_1] \; T[E_2]))$ (if x is free in $E_1$ but not in $E_2$)
+    \item $T[\lambda x.(E_1 E_2)] \Rightarrow (\textbf{B} \; T[E_1] \; T[\lambda x.E_2])$ (if x is free in $E_2$ but not in $E_1$)
+\end{enumerate}
+\textbf{B} and \textbf{C} are define as the following using the primitive functions:\\
+$\textbf{B=(S(K S)K)}$\\
+$\textbf{B=(S(S(K(S(K S)K))S)(K K))}$\\
+
+
 \subsection{Type Theory}
 \label{Type Theory}
 Type theory is the academic study of \textbf{type systems}, 
@@ -102,7 +192,7 @@ is to make sure that a term terminates.
 Many type systems have \textbf{inductive types}. Among other things this means that we have a set of base types
 and a set of type constructors that again can generate new types. So if we have the base typee $\sigma$ , 
 and two opertions $*$ and $\#$ and with the types $M$ and $N$ (what they mean are not important for this exampel) 
-then we can make a new type $T$ in the ways in \nameref{tab:inductive types} 
+then we can make a new type $T$ in the ways in \nameref{tab:inductive types}
 
 \begin{table}[]
     \centering
