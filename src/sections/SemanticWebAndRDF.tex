@@ -82,31 +82,51 @@ Figure \refname{fig:exampelGraph} is a visual graph of the graph we just made.
     \label{fig:exampelGraph}
 \end{figure}
 
-
-
-
-\begin{itemize}
-    \item Kort om historien til SW og SWT 
-    \begin{itemize}
-        \item extension av WWW
-        \item Data requires formal semantics
-        \item goal: Machine can access more information
-    \end{itemize}
-    \item Snakke om ontologies, fra oppsumering i boka + eksempler: 
-    \textit{Ontology}: The study of existence and being as such, and of the fundamental 
-    classes and relationships of existing things. \textbf{In computer scienence} an ontologi 
-    is a description of knowledge about a domain of interest, the core of which is a 
-    machine-processable specification with a formally defined meaning
-    \item RDF (bruker turtle syntax ?)
-    \begin{itemize}
-        \item hvordan det er bygd opp: object predicate subject
-        \item at det er et formelt språk for å forklare strukturert data 
-        \item Er en graph, og kan bli sett på som en directed graph.
-        \item Kort om URI, bruk av prefix
-        \item Literals
-        \item Blank nodes
-    \end{itemize}
-    \item Å lage mer kompliserte strukturer over RDF
-    \item Skrive om ottr, type systemet og hvilke mangler det har. Kanskje mangler 
-    burde komme sammen med den delen hvor man forklarer oppbygning av funksjonen.
-\end{itemize}
+\subsubsection{Lists in RDF}
+In RDF we have two main ways to represent list containers and collections. What is importent to
+note is that you can by only using blank nodes as previously mention build up lists, or just
+make every individual tripel said in other words the are just abbreviations. Lists in RDF are usually
+used when we want to say that a subject have the same relation (or predicate) to several objects.
+\\ \\ 
+A container has three differents types, namely \textbf{rdf:Seq} (represents an order list), 
+\textbf{rdf:Bag} (representing an unordered set) and \textbf{rdf:Alt} (representing a set of alternatives).
+A container is build op of a blank node which needs to either have the rdf:type
+rdf:Seq, rsd:Bag or rdf:Alt. One important thing to note is that the three different types
+don't change (or effects) the structur, only how they will be display them in different applications.
+To add nodes we will add a predicate $rdf\_1$ to $rdf\_n$ from the blank node to the member (the name used for 
+elements of the container), where the first memeber has ralation $rdf\_1$ and n-th member has relation $rdf\_n$.
+So if we whant to add an list to over rdf graph stating all Sebastian ancestors in a unorder set 
+it will look like this (Note that we have used the abbreviation \textit{a} for rdf:type):
+\begin{lstlisting}[frame=single, language=turtle]
+    @prefix  ex-p:  <http://example.org/person/> . 
+    @prefix ex-r:  <http://example.org/relation/> . 
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
+                   ex-r:hasAge  "22"^^xsd:int ; 
+                   ex-r:hasName  Sebastian@no, Bastian@en ;
+                   ex-r:ancestor [a rdf:Bag; 
+                                    rdf:_1 ex-p:Thommas; 
+                                    rdf:_2 ex-p:Roger].
+\end{lstlisting}
+The second way to make a list is by using collections. The main differense between a container 
+and a collection is that a collection is closed, menaing that we it can't be extended, 
+while we can extend a container if we have the reference to the blank node (e.g. \_:list). The reason 
+for this is that the linked list is build up like a linked list with \textbf{rdf:first} being a link to the member
+and \textbf{rdf:rest} being a link to the rest of the list, when we the have reach the end of the 
+list the rdf:rest will link us to \textbf{rdf:nil}. See \textbf{(sett inn link til bilde her)} to se the 
+full structur of the example given above, this figure also shows the differences between the container version
+and the collection version. Turlte have an abbreviation for writing collections and that is 
+to use () and put all the members of the list insided it. In the general chase it will look like this 
+$(member_1 \;member_2 .... member_n)$
+To express that all Sebastian ancestors will then look like this:
+\begin{lstlisting}[frame=single, language=turtle]
+    @prefix  ex-p:  <http://example.org/person/> . 
+    @prefix ex-r:  <http://example.org/relation/> . 
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
+                   ex-r:hasAge  "22"^^xsd:int ; 
+                   ex-r:hasName  Sebastian@no, Bastian@en ;
+                   ex-r:ancestor (ex-p:Thommas rdf:_2 ex-p:Roger).
+\end{lstlisting}
