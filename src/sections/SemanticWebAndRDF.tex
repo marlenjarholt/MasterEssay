@@ -114,7 +114,7 @@ and a collection is that a collection is closed, menaing that we it can't be ext
 while we can extend a container if we have the reference to the blank node (e.g. \_:list). The reason 
 for this is that the linked list is build up like a linked list with \textbf{rdf:first} being a link to the member
 and \textbf{rdf:rest} being a link to the rest of the list, when we the have reach the end of the 
-list the rdf:rest will link us to \textbf{rdf:nil}. See \textbf{(sett inn link til bilde her)} to se the 
+list the rdf:rest will link us to \textbf{rdf:nil}. See \nameref{fig:containerAndCollection} to se the 
 full structur of the example given above, this figure also shows the differences between the container version
 and the collection version. Turlte have an abbreviation for writing collections and that is 
 to use () and put all the members of the list insided it. In the general chase it will look like this 
@@ -130,3 +130,10 @@ To express that all Sebastian ancestors will then look like this:
                    ex-r:hasName  Sebastian@no, Bastian@en ;
                    ex-r:ancestor (ex-p:Thommas rdf:_2 ex-p:Roger).
 \end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.2]{containerAndCollection.png}
+    \caption{Shows the difference between a container and a collections in structur}
+    \label{fig:containerAndCollection}
+\end{figure}
