@@ -21,8 +21,10 @@ domain which is machine-prosecassable and with a formally defined meaning.
 
 \subsection{RDF}
 RDF stands for Resource Description Framework and it is a language for formally describing structure data, 
-and is the general method in semantic web for describing information that is in a web resource. An RDF document describes 
-a directed graph which is build up by tripls which again are build up from subject predicate and object. This is a relation 
+and is the general method in semantic web for describing information that is in a web resource. An RDF document often describes 
+a directed graph which is build up by tripls which again are build up from subject predicate and object, but it can also represent 
+a structure that we natrual wouldn't describe using graph. Due to that a resource both can be a subject/object and predicate
+meaning that an element of the graph both can be an node and a edge. This is a relation 
 from the subject to the object where the predicate tells ous about what the relationship is. In the grap the object 
 and subject will be represented as node, with the predicate as an directed edge between the two from the subject to the predicate.
 An collection of several will then result in a directed graph. An exampel of an triple can be that Sebastian hasFather Thommas, where 
@@ -137,3 +139,20 @@ To express that all Sebastian ancestors will then look like this:
     \caption{Shows the difference between a container and a collections in structur}
     \label{fig:containerAndCollection}
 \end{figure}
+
+\subsection{OTTR}
+Reasonable Ontology Templates(OTTR) is language that represents ontology modelling patterns as paramaterised 
+ontologies and is a way to make user-defined abstractions to recurring modelling patterns. 
+OTTR is build up by \textbf{templates}, that consist of a \textit{head} that specifices the name of the templates
+and the paramters, and a \textit{body} that contains the parameterised ontology pattern. We can also specify the types, which we will come back to, 
+and the cardainality of the paramters. There are four types of cardainality namely the mandatory (written 1)
+which is also the defualt value, optional (written ?), multiple(written +) and optional multiple(written *).   
+To use the templates is what is called an OTTR \textbf{instance}, often called tamplate instance contains the name of the tamplate that are to be used, 
+and a list of arguments that matches that parametes that mathces the parametes that are specified in the tamplate. 
+The pattern in the body is made out of instances of other templates until we reach what is called a \textbf{base template}. 
+In RDF the base template is the TRIPLE template which represents a single RDF tripel, and takes in three arguments a subject,
+a predicate and a object (in that particular order). Recursion is used to \textit{expand} the instances in to RDF graphs, with recursivley
+replacing all the instaces in the body with the pattern they represent. The recursion stops when it reaches a base template.
+OTTR has four seralisations for representing the templates and the instances, stOTTER, wOTTR, tabOTTR and bOTTR.
+
+\subsubsection{Types in Ottr}
