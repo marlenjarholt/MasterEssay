@@ -1,0 +1,18 @@
+%!TEX root = ../master.tex
+\section{Frog}
+
+\subsection{Motivation}
+There are no ways change or mainpulate the terms (lists, liters etc) in OTTR. Imagen that you 
+make a template for storing information about the weather, you have made sevral hundres instances. Say that one of the 
+triples the is made from expanding the template to rdf states somethings temprature in farenheit but you need the temprature in celcius.
+For now you how to change the term, meaning that you have to change the degrees manually (or using a scrip) for every OTTR instances.
+The goal of Frog is to solve this problem with being a programming language written for OTTR where we are abel to change 
+the terms using function. In the farenheit celcius exampel the solution with frog is then to make a function that can be used 
+in the template body to convert the farenheit variable given in the head to celcius. 
+\\ \\
+Having a language like Frog that can make simple functions to mainpulate terms can do more than just convert terms, it can 
+also make it possible to add new inffered information. E.g. if we have the template ex-t:Person from figure (SETT INN LINK HER)
+and we want to add a tripel to the expanded template containing the information about wheter the person is an adult or not. This 
+is information that can be inffered from the age variable, we can make a new ottr:Tripel with the person as the object, ex-r:isAdult as the 
+predicate and the result of the function ex-f:ageToAdult 
+\subsection{Plans for Frog}

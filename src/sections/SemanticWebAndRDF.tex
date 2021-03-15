@@ -145,14 +145,78 @@ Reasonable Ontology Templates(OTTR) is language that represents ontology modelli
 ontologies and is a way to make user-defined abstractions to recurring modelling patterns. 
 OTTR is build up by \textbf{templates}, that consist of a \textit{head} that specifices the name of the templates
 and the paramters, and a \textit{body} that contains the parameterised ontology pattern. We can also specify the types, which we will come back to, 
-and the cardainality of the paramters. There are four types of cardainality namely the mandatory (written 1)
-which is also the defualt value, optional (written ?), multiple(written +) and optional multiple(written *).   
+and the cardainality of the paramters. There are two types of cardainalities mandatory or optional, optional is denoted with 
+a ? while mandatory is the the defualt and isn't denoted with any thing. Parameters can also specify a defualt value, that is used 
+whenever the corresponding argument in a instead of that template is none (a value in the OTTR framework used to represent a missing or no value). 
+\nameref{fig:stOTTERGenralisation} shows a generalisation of OTTR written in the seralisation stOTTR.
+\\ \\
+The template body can also use expanssion mods on instances that 
+at least on argument that is a list. Every argument in the instance will temporarily be treated as a list in the expanssion mods, but lists that 
+are marked with the list expanssion (++ infront of the argument) are kept as they are, while the other arguments are treated as 
+a list with one element. There are three different list expanssion mods cross, zipMin and zipMax. They behave the same when only one list argument
+is marked with a list expanssion, but when serveral list are marked they behave different. Cross gives one instance per element in the cross-product. zipMin 
+makes one instance per element in the smallest list (making n instances, where n is the length of the smallest list), and relating the element on the same index 
+i in the lists. zipMax is almost the same as zipMin, but instead of choosing the smallest list zipMax makes one instaces for every element in the largest list,
+to be able to do this OTTR extends the other lists with none until they are as long as the longest list.   
+\\ \\
 To use the templates is what is called an OTTR \textbf{instance}, often called tamplate instance contains the name of the tamplate that are to be used, 
 and a list of arguments that matches that parametes that mathces the parametes that are specified in the tamplate. 
 The pattern in the body is made out of instances of other templates until we reach what is called a \textbf{base template}. 
 In RDF the base template is the TRIPLE template which represents a single RDF tripel, and takes in three arguments a subject,
 a predicate and a object (in that particular order). Recursion is used to \textit{expand} the instances in to RDF graphs, with recursivley
 replacing all the instaces in the body with the pattern they represent. The recursion stops when it reaches a base template.
-OTTR has four seralisations for representing the templates and the instances, stOTTER, wOTTR, tabOTTR and bOTTR.
+OTTR has four seralisations for representing the templates and the instances, stOTTER, wOTTR, tabOTTR and bOTTR. stOTTER is a custum serializations
+for OTTR, made to be compacte easy to ready for humans, and is partily based on parts from RDF turtle grammar.
+wOTTR is an seralisation that is written in rdf and specified by an OWL ontology and uses SHACL to define the grammar. Futhermoe tabOTTR is
+a way to create instances from spreadsheets and bOTTR can make mappings over serveral queryable sources. The following OTTR template 
+made makes a person, the instance of ex-t:Person will expand to the rdf graph made earlier.
 
-\subsubsection{Types in Ottr}
+\begin{lstlisting}[frame=single]
+    @prefix  ex-p:  <http://example.org/person/> . 
+    @prefix ex-r:  <http://example.org/relation/> .
+    @prefix ex-t:  <http://example.org/template/> . 
+    @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> . 
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix ottr: <http://ns.ottr.xyz/0.4/> .
+    
+    
+    ex-t:Person [
+        ottr:IRI ?person,
+        xsd:integer ?age,
+        ? List<ottr:IRI> ?fathers,
+        ? List<ottr:IRI> ?mothers,
+        ? List<ottr:IRI> ?ancestors,
+        List<xsd:String> ?names
+     ] :: {
+        cross | ottr:Triple(?person, ex-r:hasFather, ++?fathers),
+        cross | ottr:Triple(?person, ex-r:hasMother, ++?mothers),
+        ottr:Triple(?person, ex-r:hasAge, ?age),
+        cross | ottr:Triple(?person, ex-r:hasName, ++?names),
+        ottr:Triple(?person, ex-r:ancestor, ?ancestors)
+    }.
+    
+    ottr:Triple(_:b, ex-r:hasFather, ex-p:Roger) .
+    ex-t:Person(ex-p:Sebastian, 22 , (ex-p:Thommas, _:b), none, 
+    (ex-p:Thommas, ex-p:Roger), ("Sebastian"@no, "Bastian"@en)).
+\end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.2]{stOTTRExample.png}
+    \caption{A genralisation showing the syntax of stOTTR}
+    \label{fig:stOTTERGenralisation}
+\end{figure}
+
+\subsubsection{Types in OTTR}
+The type system in OTTR are build from three types of types, namely basic type, LUB-type and list type. The types are arrange in 
+a subtype relationship, where the set of types are transative and reflexive. The opposite or invers of a subtype is a supertype.
+All the basic types, except for ottr:IRI and ottr:Bot, are common types taken from RDF, RDFS, OWL and XSD standards. ottr:IRI reference 
+to the URI to a resource(a resource is either the subject or the object in a tripel). ottr:Bot represents the type Bot, Bot is a type that 
+is the subtype to all other types. While the type Top (represented with rdfs:Resource) on the other side is every type supertype.
+\\ \\
+LUB, \textbf{LUB<>} (denoted with ottr:Lub), stands for least upper bound, and for every basic type P there is also a LUB-type LUB<P> such that LUB<P> is 
+a subtype of P. Futhermore LUB<P> is compatible with all subtypes of P while P on the other hand is compatible with all supertype of P. 
+Futhermore we have to different types \textbf{List<>} (deonted with rdf:list ) and \textbf{NEList<>} (denoted with ottr:NEList), where 
+NEList stands for non empty list. Futhermore the 
+type system assume that there for each type P in the set of types exists a type List<P> and NEList<P>, and that 
+NEList<P> is a subtype of List<Q> for every type P that is a subclass of type Q.
