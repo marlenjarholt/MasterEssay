@@ -227,3 +227,9 @@ if we have a blank node for exampel, which can be any thing (an ottr:IRI, xsd:st
 in an instance that excepts an xsd:integer, this blank node will now be interpreted as an xsd:integer in the rest of the template. 
 Meaning that sending this node as an argument to a instance that expects a xsd:string whould give an error message. The result of this 
 is that the same resource allways have the same type, in other words that the typing is concise. 
+
+\subsubsection{Terms}
+Terms in OTTR is the set of constants and variables. Where constants includes list (which is an order collection of terms), and
+the constant nil is used to denote an empty list. The set of terms in OTTR are equal to the set of valid RDF terms (IRIs, blank nodes, literals).
+The only destinction between a variable and a constant term is in the template definition, where the 
+variable occures in a parameter declaration in signatur of the template.
