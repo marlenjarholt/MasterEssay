@@ -11,8 +11,79 @@ the terms using function. In the farenheit celcius exampel the solution with fro
 in the template body to convert the farenheit variable given in the head to celcius. 
 \\ \\
 Having a language like Frog that can make simple functions to mainpulate terms can do more than just convert terms, it can 
-also make it possible to add new inffered information. E.g. if we have the template ex-t:Person from figure (SETT INN LINK HER)
-and we want to add a tripel to the expanded template containing the information about wheter the person is an adult or not. This 
-is information that can be inffered from the age variable, we can make a new ottr:Tripel with the person as the object, ex-r:isAdult as the 
-predicate and the result of the function ex-f:ageToAdult 
+also make it possible to add new inffered information. E.g. if we have the template ex-t:Person from earlier
+and we want to add a tripel to the expanded template containing the information about wheter the person is an adult (ex-p:Adult) or a child (ex-p:Child). This 
+is information that can be inffered from the age variable, we can make a new ottr:Tripel with the person as the object, ex-r:lifestage as the 
+predicate and the result of the function ex-r:ageToLifeStage as the object. Where ex-r:ageToLifeStage is a frog function that takes in an xsd:integer
+as argument, and returns a ottr:IRI. The ottr template bellow shows the potential use of the frog function in 
+the ex-t:Person.
+
+\begin{lstlisting}[frame=single]
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> .
+@prefix ex-t:  <http://example.org/template/> . 
+@prefix ex-f:  <http://example.org/function/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ottr: <http://ns.ottr.xyz/0.4/> .
+
+ex-t:Person [
+    ottr:IRI ?person,
+    xsd:integer ?age,
+    ? List<ottr:IRI> ?fathers,
+    ? List<ottr:IRI> ?mothers,
+    ? List<ottr:IRI> ?ancestors,
+    List<xsd:String> ?names
+    ] :: {
+    cross | ottr:Triple(?person, ex-r:hasFather, ++?fathers),
+    cross | ottr:Triple(?person, ex-r:hasMother, ++?mothers),
+    ottr:Triple(?person, ex-r:hasAge, ?age),
+    cross | ottr:Triple(?person, ex-r:hasName, ++?names),
+    ottr:Triple(?person, ex-r:ancestor, ?ancestors),
+    ottr:Triple(?person, ex-r:lifestage, ex-f:ageToLifeStage ?age)
+}.
+\end{lstlisting}
+
+The expansion the two following two instances
+
+\begin{lstlisting}[frame=single]
+ottr:Triple(_:b, ex-r:hasFather, ex-p:Roger) .
+ex-t:Person(ex-p:Sebastian, 22 , (ex-p:Thommas, _:b), none, 
+(ex-p:Thommas, ex-p:Roger), ("Sebastian"@no, "Bastian"@en)).
+
+ex-t:person(ex-p:Nina, 6, none, none ,none, ("Nina"@no))
+\end{lstlisting}
+
+will then be
+\begin{lstlisting}[frame=single, language=turtle]
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
+                ex-r:hasAge  "22"^^xsd:int ; 
+                ex-r:hasName  Sebastian@no, Bastian@en ;
+                ex-r:ancestor (ex-p:Thommas, ex-p:Roger);
+                ex-r:lifestage ex-p:Adult.
+
+ex-p:Nina ex-r:hasAge  "6"^^xsd:int ; 
+          ex-r:hasName  Nina@no ;
+          ex-r:lifestage ex-p:Child.
+\end{lstlisting}
+
+
+
+
 \subsection{Plans for Frog}
+The plan is that frog is a language that is to be written in RDF. In addition to being a high-order functional language, 
+with only pure functions. 
+Frog will also have a type system, which we will come bace to, and it should be clear form the definition of 
+the function what the type of the different parameters are and the type of the return value. 
+A frog function can only take in arguments and an return values that are a type from the OTTR type system, meaning that frog will have the same type system as OTTR.
+The advantage of this is that frog can do type checking, since a function has a return value we can check that the type of the return value is of the same type that 
+the argument in the instance needs to be.
+Since frog is supposed to be a high-order language and will have the same type system as OTTR  we need to add a new type to the OTTR type system, namely a 
+function type that we need to give to every frog function. There is one exception to frog being high-order and that is that a function that is used directly in a 
+template (like ex-f:ageToLifeStage in ex-t:Person) aren't allowed to return a function type. 
+

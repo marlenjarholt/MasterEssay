@@ -54,26 +54,26 @@ graph:
 \\ \\
 
 \begin{lstlisting}[frame=single, language=turtle]
-    @prefix  ex-p:  <http://example.org/person/> . 
-    @prefix ex-r:  <http://example.org/relation/> . 
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
-    ex-p:Sebastian ex-r:hasFather ex-p:Thommas .
-    ex-p:Sebastian ex-r:hasFather [ ex-r:hasFather ex-p:Roger] . 
-    ex-p:Sebastian ex-r:hasAge  "22"^^xsd:int . 
-    ex-p:Sebastian ex-r:hasName  Sebastian@no . 
-    ex-p:Sebastian ex-r:hasName  Bastian@en .
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+ex-p:Sebastian ex-r:hasFather ex-p:Thommas .
+ex-p:Sebastian ex-r:hasFather [ ex-r:hasFather ex-p:Roger] . 
+ex-p:Sebastian ex-r:hasAge  "22"^^xsd:int . 
+ex-p:Sebastian ex-r:hasName  Sebastian@no . 
+ex-p:Sebastian ex-r:hasName  Bastian@en .
 \end{lstlisting}
 In addition to the abbreviations we have already made turtle stile have some more abbreviations when writing the triples. For instanse if we have the same 
 predicate and subject several times, with different objects, we can just write the predicate and subject one time and seperate the objects with a ,. Futhermore 
 we can also abbreviate when we use the same subject severalt times by writne ; in the end of the line instead of . . This gives this turtle file:
 \\ \\
 \begin{lstlisting}[frame=single, language=turtle]
-    @prefix  ex-p:  <http://example.org/person/> . 
-    @prefix ex-r:  <http://example.org/relation/> . 
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
-    ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
-                   ex-r:hasAge  "22"^^xsd:int ; 
-                   ex-r:hasName  Sebastian@no, Bastian@en ;
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
+                ex-r:hasAge  "22"^^xsd:int ; 
+                ex-r:hasName  Sebastian@no, Bastian@en ;
 \end{lstlisting}
 
 Figure \refname{fig:exampelGraph} is a visual graph of the graph we just made.
@@ -100,16 +100,16 @@ elements of the container), where the first memeber has ralation $rdf\_1$ and n-
 So if we whant to add an list to over rdf graph stating all Sebastian ancestors in a unorder set 
 it will look like this (Note that we have used the abbreviation \textit{a} for rdf:type):
 \begin{lstlisting}[frame=single, language=turtle]
-    @prefix  ex-p:  <http://example.org/person/> . 
-    @prefix ex-r:  <http://example.org/relation/> . 
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
-    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
-                   ex-r:hasAge  "22"^^xsd:int ; 
-                   ex-r:hasName  Sebastian@no, Bastian@en ;
-                   ex-r:ancestor [a rdf:Bag; 
-                                    rdf:_1 ex-p:Thommas; 
-                                    rdf:_2 ex-p:Roger].
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
+                ex-r:hasAge  "22"^^xsd:int ; 
+                ex-r:hasName  Sebastian@no, Bastian@en ;
+                ex-r:ancestor [a rdf:Bag; 
+                                rdf:_1 ex-p:Thommas; 
+                                rdf:_2 ex-p:Roger].
 \end{lstlisting}
 The second way to make a list is by using collections. The main differense between a container 
 and a collection is that a collection is closed, menaing that we it can't be extended, 
@@ -123,14 +123,14 @@ to use () and put all the members of the list insided it. In the general chase i
 $(member_1 \;member_2 .... member_n)$
 To express that all Sebastian ancestors will then look like this:
 \begin{lstlisting}[frame=single, language=turtle]
-    @prefix  ex-p:  <http://example.org/person/> . 
-    @prefix ex-r:  <http://example.org/relation/> . 
-    @prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
-    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
-                   ex-r:hasAge  "22"^^xsd:int ; 
-                   ex-r:hasName  Sebastian@no, Bastian@en ;
-                   ex-r:ancestor (ex-p:Thommas rdf:_2 ex-p:Roger).
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
+                ex-r:hasAge  "22"^^xsd:int ; 
+                ex-r:hasName  Sebastian@no, Bastian@en ;
+                ex-r:ancestor (ex-p:Thommas, ex-p:Roger).
 \end{lstlisting}
 
 \begin{figure}
@@ -146,7 +146,8 @@ ontologies and is a way to make user-defined abstractions to recurring modelling
 OTTR is build up by \textbf{templates}, that consist of a \textit{head} that specifices the name of the templates
 and the paramters, and a \textit{body} that contains the parameterised ontology pattern. We can also specify the types, which we will come back to, 
 and the cardainality of the paramters. There are two types of cardainalities mandatory or optional, optional is denoted with 
-a ? while mandatory is the the defualt and isn't denoted with any thing. Parameters can also specify a defualt value, that is used 
+a ? while mandatory is the the defualt and isn't denoted with any thing. In additon an paramter can be non-blank (meaning that it can't take inn 
+a blank node) this is denoted with !. Parameters can also specify a defualt value, that is used 
 whenever the corresponding argument in a instead of that template is none (a value in the OTTR framework used to represent a missing or no value). 
 \nameref{fig:stOTTERGenralisation} shows a generalisation of OTTR written in the seralisation stOTTR.
 \\ \\
@@ -172,37 +173,37 @@ a way to create instances from spreadsheets and bOTTR can make mappings over ser
 made makes a person, the instance of ex-t:Person will expand to the rdf graph made earlier.
 
 \begin{lstlisting}[frame=single]
-    @prefix  ex-p:  <http://example.org/person/> . 
-    @prefix ex-r:  <http://example.org/relation/> .
-    @prefix ex-t:  <http://example.org/template/> . 
-    @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> . 
-    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    @prefix ottr: <http://ns.ottr.xyz/0.4/> .
-    
-    
-    ex-t:Person [
-        ottr:IRI ?person,
-        xsd:integer ?age,
-        ? List<ottr:IRI> ?fathers,
-        ? List<ottr:IRI> ?mothers,
-        ? List<ottr:IRI> ?ancestors,
-        List<xsd:String> ?names
-     ] :: {
-        cross | ottr:Triple(?person, ex-r:hasFather, ++?fathers),
-        cross | ottr:Triple(?person, ex-r:hasMother, ++?mothers),
-        ottr:Triple(?person, ex-r:hasAge, ?age),
-        cross | ottr:Triple(?person, ex-r:hasName, ++?names),
-        ottr:Triple(?person, ex-r:ancestor, ?ancestors)
-    }.
-    
-    ottr:Triple(_:b, ex-r:hasFather, ex-p:Roger) .
-    ex-t:Person(ex-p:Sebastian, 22 , (ex-p:Thommas, _:b), none, 
-    (ex-p:Thommas, ex-p:Roger), ("Sebastian"@no, "Bastian"@en)).
+@prefix  ex-p:  <http://example.org/person/> . 
+@prefix ex-r:  <http://example.org/relation/> .
+@prefix ex-t:  <http://example.org/template/> . 
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ottr: <http://ns.ottr.xyz/0.4/> .
+
+
+ex-t:Person [
+    ottr:IRI ?person,
+    xsd:integer ?age,
+    ? List<ottr:IRI> ?fathers,
+    ? List<ottr:IRI> ?mothers,
+    ? List<ottr:IRI> ?ancestors,
+    List<xsd:String> ?names
+    ] :: {
+    cross | ottr:Triple(?person, ex-r:hasFather, ++?fathers),
+    cross | ottr:Triple(?person, ex-r:hasMother, ++?mothers),
+    ottr:Triple(?person, ex-r:hasAge, ?age),
+    cross | ottr:Triple(?person, ex-r:hasName, ++?names),
+    ottr:Triple(?person, ex-r:ancestor, ?ancestors)
+}.
+
+ottr:Triple(_:b, ex-r:hasFather, ex-p:Roger) .
+ex-t:Person(ex-p:Sebastian, 22 , (ex-p:Thommas, _:b), none, 
+(ex-p:Thommas, ex-p:Roger), ("Sebastian"@no, "Bastian"@en)).
 \end{lstlisting}
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.2]{stOTTRExample.png}
+    \includegraphics[width=1\textwidth]{stOTTRExample.png}
     \caption{A genralisation showing the syntax of stOTTR}
     \label{fig:stOTTERGenralisation}
 \end{figure}
@@ -217,6 +218,12 @@ is the subtype to all other types. While the type Top (represented with rdfs:Res
 LUB, \textbf{LUB<>} (denoted with ottr:Lub), stands for least upper bound, and for every basic type P there is also a LUB-type LUB<P> such that LUB<P> is 
 a subtype of P. Futhermore LUB<P> is compatible with all subtypes of P while P on the other hand is compatible with all supertype of P. 
 Futhermore we have to different types \textbf{List<>} (deonted with rdf:list ) and \textbf{NEList<>} (denoted with ottr:NEList), where 
-NEList stands for non empty list. Futhermore the 
+NEList stands for non empty list. In addition the 
 type system assume that there for each type P in the set of types exists a type List<P> and NEList<P>, and that 
-NEList<P> is a subtype of List<Q> for every type P that is a subclass of type Q.
+NEList<P> is a subtype of List<Q> for every type P that is a subtype of type Q.
+\\ \\
+One of the reasons to have types in OTTR is to make sure that the use of types is consistens. So
+if we have a blank node for exampel, which can be any thing (an ottr:IRI, xsd:string, xsd:integer, etc), and we use that blank node 
+in an instance that excepts an xsd:integer, this blank node will now be interpreted as an xsd:integer in the rest of the template. 
+Meaning that sending this node as an argument to a instance that expects a xsd:string whould give an error message. The result of this 
+is that the same resource allways have the same type, in other words that the typing is concise. 
