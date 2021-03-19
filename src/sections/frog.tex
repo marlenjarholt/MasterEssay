@@ -12,8 +12,8 @@ in the template body to convert the farenheit variable given in the head to celc
 \\ \\
 Having a language like Frog that can make simple functions to mainpulate terms can do more than just convert terms, it can 
 also make it possible to add new inffered information. E.g. if we have the template ex-t:Person from earlier
-and we want to add a tripel to the expanded template containing the information about wheter the person is an adult (ex-p:Adult) or a child (ex-p:Child). This 
-is information that can be inffered from the age variable, we can make a new ottr:Tripel with the person as the object, ex-r:lifestage as the 
+and we want to add a tripel to the expanded template containing the information about whether the person is of type adult (ex-p:Adult) or of type child (ex-p:Child). This 
+is information that can be inffered from the age variable, we can make a new rdf-otype with the person as the object, rdf:type as the 
 predicate and the result of the function ex-r:ageToLifeStage as the object. Where ex-r:ageToLifeStage is a frog function that takes in an xsd:integer
 as argument, and returns a ottr:IRI. The ottr template bellow shows the potential use of the frog function in 
 the ex-t:Person.
@@ -26,6 +26,7 @@ the ex-t:Person.
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> . 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ottr: <http://ns.ottr.xyz/0.4/> .
+@prefix o-rdf: <http://tpl.ottr.xyz/rdf/0.1/> .
 
 ex-t:Person [
     ottr:IRI ?person,
@@ -40,7 +41,7 @@ ex-t:Person [
     ottr:Triple(?person, ex-r:hasAge, ?age),
     cross | ottr:Triple(?person, ex-r:hasName, ++?names),
     ottr:Triple(?person, ex-r:ancestor, ?ancestors),
-    ottr:Triple(?person, ex-r:lifestage, ex-f:ageToLifeStage ?age)
+    rdf-o:Type(?person, ex-r:ageToLifeStage ?age)
 }.
 \end{lstlisting}
 
@@ -58,32 +59,53 @@ will then be
 \begin{lstlisting}[frame=single, language=turtle]
 @prefix  ex-p:  <http://example.org/person/> . 
 @prefix ex-r:  <http://example.org/relation/> . 
-@prefix xsd: <http://www.w3.org/2001/XMLSchema\#>  . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema/#>  . 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-
 ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
                 ex-r:hasAge  "22"^^xsd:int ; 
-                ex-r:hasName  Sebastian@no, Bastian@en ;
-                ex-r:ancestor (ex-p:Thommas, ex-p:Roger);
-                ex-r:lifestage ex-p:Adult.
+                ex-r:hasName  "Sebastian"@no, "Bastian"@en ;
+                ex-r:ancestor (ex-p:Thommas ex-p:Roger);
+                a ex-p:Adult.
 
 ex-p:Nina ex-r:hasAge  "6"^^xsd:int ; 
-          ex-r:hasName  Nina@no ;
-          ex-r:lifestage ex-p:Child.
+          ex-r:hasName  "Nina"@no ;
+          a ex-p:Child.
 \end{lstlisting}
-
-
-
+There are several methods that allready exist to add inffered information to rdf graphs, using function or other methods. 
+One way you can do this is with SPARQL, which is a query language over RDF with many similarities to SQL for relational 
+databases e.g. that they have SELECT, WHERE, GROUP BY, etc, that are build up in a similar fashion. In SPARQL you can use 
+a INSERT DATA clause which insert the data in the field in to the graph, combind with a WHERE-clause, and possible a BIND. 
+In sparql BIND allows values to be assing to a veriable, meaning that we can make simple functions and bind the result of 
+the function to a variable, which again can be used in INSERT DATA clause to add it to the rdf graph. The example that was
+described earlier, with converting farenheit to celcius can then be done by using this technique (but here we'll end up with a 
+triple with both celcius and farenheit is we don't delete the farenheit afterwards). 
+An other alternative to Frog and it's functionalty is OWL. OWL is a Semantic Web language that are made for representing complex 
+knowledge, and it's based on logic. In owl we can define the descriptions of classes. Then can use allready existing 
+predicates and classes to define new ones from inffered information. E.g in the example mention eariler where we defined in the template
+with a frog function, wheter the type of the object was child or an adult. This could have been done with modelling in OWL. If we say that  
+ex-p:Adult as everthing that has age bigger then 17 and ex-p:Child as everything that has age equal or bigger then 17.
+\\ \\
+The reason it still will be nice to have a language like frog that can be used in the template compared to the 
+methodes mention over is that the functions becomes a part of the domain. In additon the methods mention over implies
+that we have to add the inffered information before using template. Frog on the other side will offer the abilities to 
+do this directly in the template. 
 
 \subsection{Plans for Frog}
-The plan is that frog is a language that is to be written in RDF. In addition to being a high-order functional language, 
+The plan is that frog is a language that is written in RDF. In addition to being a high-order functional language, 
 with only pure functions. 
-Frog will also have a type system, which we will come bace to, and it should be clear form the definition of 
+Frog will also have a type system, which we will come back to, and it should be clear form the definition of 
 the function what the type of the different parameters are and the type of the return value. 
-A frog function can only take in arguments and an return values that are a type from the OTTR type system, meaning that frog will have the same type system as OTTR.
-The advantage of this is that frog can do type checking, since a function has a return value we can check that the type of the return value is of the same type that 
-the argument in the instance needs to be.
-Since frog is supposed to be a high-order language and will have the same type system as OTTR  we need to add a new type to the OTTR type system, namely a 
-function type that we need to give to every frog function. There is one exception to frog being high-order and that is that a function that is used directly in a 
-template (like ex-f:ageToLifeStage in ex-t:Person) aren't allowed to return a function type. 
-
+A frog function can only take in arguments and an return values that are a type from the OTTR type system, 
+meaning that frog will have the same type system as OTTR.
+The advantage of this is that frog can do type checking, since a function has a return value we can check that 
+the type of the return value is of the same type that the argument in the instance needs to be.
+Since frog is supposed to be a high-order language and will have the same type system as OTTR  
+we need to add a new type to the OTTR type system, namely a function type that we need to give to every frog function. 
+There is one exception to frog being high-order and that is that a function that is used directly in a 
+template (like ex-f:ageToLifeStage in ex-t:Person) aren't allowed to return a function type. Due to addiong a new 
+fnction type in the OTTR type system we also need to add terms that maches the new type. 
+\\ \\
+The benefits of making a whole new language like frog for making functions instead of using a scripting language is 
+that is that the types used in frog matches the types in OTTR (in additon to frog doing type checking) meaning that 
+the we don't need to transelate types from one type system to another (from the scripting language to OTTR). This means 
+that frog probably will be less error-prone than using a scripting language. 
