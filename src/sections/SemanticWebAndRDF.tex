@@ -215,8 +215,9 @@ with functions and adding new trippels.
 The type system in OTTR are build from three types of types, namely basic type, LUB-type and list type. The types are arrange in 
 a subtype relationship, where the set of types are transative and reflexive. The opposite or invers of a subtype is a supertype.
 All the basic types, except for ottr:IRI and ottr:Bot, are common types taken from RDF, RDFS, OWL and XSD standards. ottr:IRI reference 
-to the URI to a resource(a resource is either the subject or the object in a tripel). ottr:Bot represents the type Bot, Bot is a type that 
-is the subtype to all other types. While the type Top (represented with rdfs:Resource) on the other side is every type supertype.
+to the URI to a resource. ottr:Bot represents the type Bot. Bot is a type that is the subtype to all other types. In addition no term can 
+be of type Top, except for the term none. 
+While the type Top (represented with rdfs:Resource) on the other side is every type supertype.
 \\ \\
 LUB, \textbf{LUB<>} (denoted with ottr:Lub), stands for least upper bound, and for every basic type P there is also a LUB-type LUB<P> such that LUB<P> is 
 a subtype of P. Futhermore LUB<P> is compatible with all subtypes of P while P on the other hand is compatible with all supertype of P. 

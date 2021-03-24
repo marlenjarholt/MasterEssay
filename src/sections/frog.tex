@@ -71,24 +71,6 @@ ex-p:Nina ex-r:hasAge  "6"^^xsd:int ;
           ex-r:hasName  "Nina"@no ;
           a ex-p:Child.
 \end{lstlisting}
-There are several methods that allready exist to add inffered information to rdf graphs, using function or other methods. 
-One way you can do this is with SPARQL, which is a query language over RDF with many similarities to SQL for relational 
-databases e.g. that they have SELECT, WHERE, GROUP BY, etc, that are build up in a similar fashion. In SPARQL you can use 
-a INSERT DATA clause which insert the data in the field in to the graph, combind with a WHERE-clause, and possible a BIND. 
-In sparql BIND allows values to be assing to a veriable, meaning that we can make simple functions and bind the result of 
-the function to a variable, which again can be used in INSERT DATA clause to add it to the rdf graph. The example that was
-described earlier, with converting farenheit to celcius can then be done by using this technique (but here we'll end up with a 
-triple with both celcius and farenheit is we don't delete the farenheit afterwards). 
-An other alternative to Frog and it's functionalty is OWL. OWL is a Semantic Web language that are made for representing complex 
-knowledge, and it's based on logic. In owl we can define the descriptions of classes. Then can use allready existing 
-predicates and classes to define new ones from inffered information. E.g in the example mention eariler where we defined in the template
-with a frog function, wheter the type of the object was child or an adult. This could have been done with modelling in OWL. If we say that  
-ex-p:Adult as everthing that has age bigger then 17 and ex-p:Child as everything that has age equal or bigger then 17.
-\\ \\
-The reason it still will be nice to have a language like frog that can be used in the template compared to the 
-methodes mention over is that the functions becomes a part of the domain. In additon the methods mention over implies
-that we have to add the inffered information before using template. Frog on the other side will offer the abilities to 
-do this directly in the template. 
 
 \subsection{Plans for Frog}
 The plan is that frog is a language that is written in RDF. In addition to being a high-order functional language, 
@@ -104,8 +86,44 @@ we need to add a new type to the OTTR type system, namely a function type that w
 There is one exception to frog being high-order and that is that a function that is used directly in a 
 template (like ex-f:ageToLifeStage in ex-t:Person) aren't allowed to return a function type. Due to addiong a new 
 fnction type in the OTTR type system we also need to add terms that maches the new type. 
+
+\subsection{Alternative approaches}
+There are several methods that allready exist to add inffered information to rdf graphs, using function or other methods. 
+One way you can do this is with SPARQL, which is a query language over RDF with many similarities to SQL for relational 
+databases e.g. that they have SELECT, WHERE, GROUP BY, etc, that are build up in a similar fashion. In SPARQL you can use 
+a INSERT DATA clause which insert the data in the field in to the graph, combind with a WHERE-clause, and possible a BIND. 
+In sparql BIND allows values to be assing to a veriable, meaning that we can make simple functions and bind the result of 
+the function to a variable, which again can be used in INSERT DATA clause to add it to the rdf graph. The example that was
+described earlier, with converting farenheit to celcius can then be done by using this technique (but here we'll end up with a 
+triple with both celcius and farenheit is we don't delete the farenheit afterwards). 
 \\ \\
-The benefits of making a whole new language like frog for making functions instead of using a scripting language is 
+An other alternative to Frog and it's functionalty is OWL. OWL is a Semantic Web language that are made for representing complex 
+knowledge, and it's based on logic. In owl we can define the descriptions of classes. Then can use already existing 
+predicates and classes to define new ones from inffered information. E.g in the example mention eariler where we defined in the template
+with a frog function, wheter the type of the object was child or an adult. This could have been done with modelling in OWL. If we say that  
+ex-p:Adult as everthing that has age bigger then 17 and ex-p:Child as everything that has age equal or bigger then 17.
+\\ \\
+The last method used in the semanitc web we will mention is SWRL, which is a proposed language for semanitc web. SWRL can be used 
+to express rules and logic, and is a compination of OWL and a subset of Rule Markup language. SWRL also offers several function 
+which can be used on different types (from, rdf, xsd, and owl), but we can not make our own functions, only use the ones that 
+SWRL has defined. SWRL is build up with a body that are a set of conditions and a head which is the consequences of the
+conditions. Yhe exampel from eariler where we either added the type ex-p:Child or ex-p:Adult can be solved in SWRL with 
+making two rules, one for ex-p:Child and one for ex-p:Adult. In the rulte for ex-p:Child we need two condtions on which 
+state that the person has an age and one which checks that the age is less than 18 (for this we can use the SWRL function
+swrl:lessThan), the conclution of this rule is that the type of the person is ex-p:Child. The ex-p:Adult rule will look 
+similar, the conditions will be that the person has an age and that the age is greater then 17 (using the SWRL function 
+swrl:greaterThan) and that has the condition that the person has type ex-p:Adult. We can also express the converting from farenheit
+to celcius with SWRL using the condition that it has a farenheit temparture and a combination of math functions offerd by SWRL to 
+make the conversion as an condition.
+\\ \\
+The reason it still will be nice to have a language like frog that can be used in the template compared to the 
+methodes mention over is that the functions becomes a part of the domain. In additon the methods mention over implies
+that we have to add the inffered information before using template. Frog on the other side will offer the abilities to 
+do this directly in the template. 
+\\ \\
+In additon an alternative approache to Frog which is not already meantion and which is not a part of semanitc web 
+is using a scripting language to write the functions.
+The benefits of making a whole new language like Frog for making functions instead of using a scripting language is 
 that is that the types used in frog matches the types in OTTR (in additon to frog doing type checking) meaning that 
 the we don't need to transelate types from one type system to another (from the scripting language to OTTR). This means 
-that frog probably will be less error-prone than using a scripting language. 
+that frog probably will be less error-prone than using a scripting language.
