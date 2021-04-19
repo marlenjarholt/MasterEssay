@@ -3,14 +3,18 @@
 
 \subsection{(Untyped) Lambda Calculus}
 \label{Lambda Calculus}
-$\lambda$-calculus is a formal system for expressing computation made by Alonzo Church. It consists of terms, and binding and substitution over terms. To build terms there are three rules:
+$\lambda$-calculus is a formal system for expressing computation made by Alonzo Church. It consists of terms, binding, and substitution over terms. 
+There are three rules to build up new terms:
 
 \begin{itemize}
     \item Variable: A name which  is a placeholder for a parameter. An variable $x$ is in itself a lambda term 
     \item Abstraction: If we have a term $M$ and an variable $x$. Then we also have the term $\lambda x.M$ where $x$ is bound in the expression
     \item Application: If $E_1$ and $E_2$ are lambda-terms then $(E_1 E_2) $ are also a lambda term. Where $E_2$ is applied to $E_1$
 \end{itemize}
-All functions in $\lambda$-calculus are first-class values, which means that you can send in a function as an parameter, and that a function can return a other function (or the same function, ref. to the self-application function ($\lambda f.ff$)). It can also be good to know that $\lambda$-calculus is left-associative this means that $E_1 E_2 E_3 \leftrightarrow E_1 (E_2 E_3)$  \\ \\
+All functions in $\lambda$-calculus are first-class values, which means that a function can take in a function as an argument, and/or 
+having another function (or the same function, ref. to the self-application function ($\lambda f.ff$)) as a return value.
+Bear in mind that $\lambda$-calculus is left-associative, which means that $E_1 E_2 E_3 \leftrightarrow E_1 (E_2 E_3)$  
+\\ \\
 To make it easier to understand the the different theologies used and explained in the sections bellow look at the figure \nameref{fig:LC-explenations}. 
 
 \begin{figure}
@@ -23,26 +27,35 @@ theologies in $\lambda$-calculus}
 
 
 \subsubsection{Lambda terms}
-The rules to make terms is all ready explained in the previous chapter. But I want to add some extra information. Among other things that the \textbf{abstraction} rule is the rule that makes the definition of the anonymous function. Furthermore the abstraction in it self only makes the function and binds the variables, but it doesn't execute it. 
+How to build up terms using is already explained, but some extra information is needed to have a better understaning of terms. 
+Firstly that the \textbf{abstraction} rule is the rule that makes the definition of the anonymous function. 
+Secondly the abstraction in it self only makes the function and binds the variables, but it doesn't execute it. 
 
 \subsubsection{Bound and Free variables}
-As previously mentioned it is the \textbf{abstraction} that sets the \textbf{bound variables}, namely the $\lambda$ in the term binds the variable, and an variable is bound if it is found in the body of the abstraction. E.g the variable $x$ is a \textbf{bound variable} in the abstraction of the $\lambda$-term $\lambda x.x$.\\ \\
-The \textbf{free variables} are the opposite the bound variables, or said with other words the rest of the variables. Said more formal: If you have a set of bound variables $B_1$ in a term $E_1$ with a set $V_1$ for all variables.  Then the free variables $F_1$ are $F_1 = \{V_1\setminus B_1\}$. 
-You can also extend this general rule further, let us add another therm $E_1$ with a set $V_2$ for all variables in the term and $B_2 $ for all the bound variables. Then the \textbf{free variables} in $E_1 E_2$, $F_1 F_2$ is $F_1 F_2 = \{V_1\setminus B_1\} \cup \{V_2\setminus B_2\}$. In other words the set of the free variables in term $E_1 E_2$ is the union of the free variables in $E_1$ and $E_2$
-To further elaborate you can state that if you have a term which consist of the free variable $x$, then $x$ is a free variable.
+As previously mentioned the \textbf{abstraction} sets the \textbf{bound variables}, 
+more precisely the $\lambda$ in the term binds the variable to the expression of the function body of the abstraction,
+if it exist in the body.
+E.g the variable $x$ is a \textbf{bound variable} in the abstraction of the $\lambda$-term $\lambda x.x$, since $x$ is present in the function body.
+\\ \\
+\textbf{Free variables} are the opposite of bound variables. More formally we can say that if we have 
+a set of bound variables $B_1$ in a term $E_1$ with a set $V_1$ for all variables.  
+Then the free variables $F_1$ are $F_1 = V_1\setminus B_1$. You can also extend this general rule further, 
+let us add another therm $E_1$ with a set $V_2$ for all variables in the term and $B_2 $ for all the bound variables. 
+Then the \textbf{free variables} in $E_1 E_2$, $F_1 F_2$ equals $ \{V_1\setminus B_1\} \cup \{V_2\setminus B_2\}$. 
+In other words the set of the free variables in term $E_1 E_2$ is the union of the free variables in $E_1$ and $E_2$
 
 \subsubsection{$\alpha$-conversion}
-
-First of it is nice to mention what \textbf{$\alpha$ equivalence} is. It basically means that that two lambda terms are alpha-equivalent if the one 
-difference in the terms has the variables names. E.g $\lambda ab.ab$ is alpha-equivalent to the lambda term $\lambda xy.xy$ 
+To explain $\alpha$-conversion  one needs to have an understaning of what \textbf{$\alpha$ equivalence} is.
+In short two lambda terms are $\alpha$-equivalent if the only difference in the terms has the variables names.
+E.g $\lambda ab.ab$ is alpha-equivalent to the lambda term $\lambda xy.xy$ 
 \\ \\
-With the $\alpha$-reduction in mind, \textbf{$\alpha$-conversion} is that you change the name of the variable in the $\lambda$ part 
-and in the body so that the new term is $alpha$ equivalent to the old term. E.g on $\alpha$-conversion of $\lambda ab.ab$ is $\lambda xy.xy$ 
-since this are $alpha$ equivalent. Bear in mind that you're not allowed to rename the variable to a name of another variable in the term. 
-This because the two terms won't be $alpha$ equivalent.
+With the $\alpha$-reduction in mind, \textbf{$\alpha$-conversion} is a variables name changing in the $\lambda$ part 
+and in the body such that the new term is $alpha$ equivalent to the old term. E.g on $\alpha$-conversion of $\lambda ab.ab$ is $\lambda xy.xy$ 
+since this are $alpha$ equivalent. Bear in mind that we are not allowed to rename the variable to a name of an already exsisting variable in the term,
+as the result of this also will change the meaning. Resulting in that the two terms won't be $alpha$ equivalent.
 
-\paragraph{$\alpha$-conversion exampels}. As we have allready mention when doing $\alpha$-conversion we can only change the names of the variables in the term, so that 
-the term dosen't change. E.g. $\lambda x.x \rightarrow_\alpha \lambda y.y$ since we haven't change the meaning of the term. So the reuslt of sending in any value/term 
+As we have already mention when doing $\alpha$-conversion we can only change the names of the variables in the term, so that 
+the term dosen't change its meaning. E.g. $\lambda x.x \rightarrow_\alpha \lambda y.y$ since we haven't change the meaning of the term. The result of sending in any value/term 
 $e$ will give ous the same reutrn value, in this case just $e$ itself. An exampel of what isn't allowed to do is this $\lambda x.xy \rightarrow_\alpha \lambda y.yy$. This is 
 because this terms will give us different return values for an arguemnt. Lets try with $e$ again, then we would se that  $\lambda x.xy e$ would give us $ey$ while 
 $\lambda y.yy e$ whould give us $ee$, and $ey \neq ee$. So the term $\lambda x.xy$ is $\alpha$-equivalent to all terms where we change to $x$ to any thing except $y$. 

@@ -41,7 +41,7 @@ ex-t:Person [
     ottr:Triple(?person, ex-r:hasAge, ?age),
     cross | ottr:Triple(?person, ex-r:hasName, ++?names),
     ottr:Triple(?person, ex-r:ancestor, ?ancestors),
-    rdf-o:Type(?person, ex-r:ageToLifeStage ?age)
+    rdf-o:Type(?person, (ex-f:ageToLifeStage ?age))
 }.
 \end{lstlisting}
 
@@ -78,7 +78,7 @@ with only pure functions.
 Frog will also have a type system, which we will come back to, and it should be clear form the definition of 
 the function what the type of the different parameters are and the type of the return value. 
 A frog function can only take in arguments and an return values that are a type from the OTTR type system, 
-meaning that frog will have the same type system as OTTR.
+meaning that frog will have the same type system as OTTR and the same term system as OTTR.
 The advantage of this is that frog can do type checking, since a function has a return value we can check that 
 the type of the return value is of the same type that the argument in the instance needs to be.
 Since frog is supposed to be a high-order language and will have the same type system as OTTR  
@@ -86,6 +86,55 @@ we need to add a new type to the OTTR type system, namely a function type that w
 There is one exception to frog being high-order and that is that a function that is used directly in a 
 template (like ex-f:ageToLifeStage in ex-t:Person) aren't allowed to return a function type. Due to addiong a new 
 fnction type in the OTTR type system we also need to add terms that maches the new type. 
+
+\subsubsection{Proposed syntax}
+Frog's syntax has some properties that needs to be fulfilled: 
+\begin{enumerate}
+    \item The language shall be written in RDF 
+    \item A named function should know its type. Where the type is a combination of the parameter types 
+    and the return type of the function.
+    \item A named function is not a function until the rdf:type is set as an Function
+    \item The body of the function shall be build up by list, like the LISP languages
+\end{enumerate}
+
+
+
+\subsubsection{Evaluation}
+The plan for evaluation is to use a lazy evaluation approache. Lazy evalution will then be used in the functions it self, 
+but also when we are supposed to evaluate it in the ottr template. The result of this is then that the functions aren't evaluated 
+for before it reaches an base template (like ottr:Triple). Why this in this case is a better solution than an eager evalution 
+approache is that OTTR doesn't froce the user to use all variables in the template (even though a warring is thrown), therefor using 
+lazy evaluate would mean that we are not evaluating the function if it's never used. Using lazy evaluation as an evaluation 
+strategie will than in addition add memorization, the reason why this is a good idea in this case is that when we have no why 
+off knowing when calling an instance with a function as one of the arguments (if it isn't a base template) how many times this 
+value would end up in a base template. Lazy evaluation would then make sure that the function really only is evaluated once for this 
+function call and only if the value of the function ever is needed. 
+
+\subsubsection{Type checking in ottr}
+Even though Frog will use lazy evaluation to evaluate a function call it will check that the type returned by the function is compatible with 
+the the parameter type for that given arguement. Meaning that calling a function that returns an xsd:strin on an instance that 
+expects an xsd:integer will throw an error. The reason why this has to be done at this stage is that the base template can be typed 
+more generaly than what the template that makes the instances is, with general meaning that the type in the template of the instance
+is a subtype of the type in the base template. An good example of this is the base template ottr:Triple which takes in 3 arguments that 
+are ottr:Resources meaning that the arguments can be of any of the other types in the ottr type system since every type is a subtype of 
+ottr:Resource, meaing that checking that the type returned by the function is compatible at this stage could result in a wrong answer. 
+An alternernativ approch, where the type checking also is done when the function reaches a base template, whould be to make a wrapper 
+class which contains the function call and the expected type of the argument, and the evaluate that the type matches first when we need 
+to use the function. The reason why this wouldn't be the best approache is that we are not guaranteed that the function reaches a 
+base template at some ponit, but ottr throws an type error regardless.
+\\ \\
+We also want it to be possible to write lambda-functions or anonym functions straight in to the ottr template. Since we want to check that 
+the type returned by the function is compatible with the type that the template expects. This means that we have to be able to evaluate from 
+the lambda function what type it will resolve to be. One methode to do this can be to use the same typing rules that are used in 
+simply typed lambda calculus. The difference between simply typed lambda calculus and Frog lambda functions (for now) is that simply typed 
+lambda calculus have the paramtertypes while Frog won't (because for now frog only set parameter types )  TODO
+
+\subsubsection{Functions on lists}
+TODO
+
+\subsubsection{Termination}
+TODO
+
 
 \subsection{Alternative approaches}
 There are several methods that allready exist to add inffered information to rdf graphs, using function or other methods. 
@@ -115,6 +164,24 @@ similar, the conditions will be that the person has an age and that the age is g
 swrl:greaterThan) and that has the condition that the person has type ex-p:Adult. We can also express the converting from farenheit
 to celcius with SWRL using the condition that it has a farenheit temparture and a combination of math functions offerd by SWRL to 
 make the conversion as an condition.
+\\ \\
+(Source: http://sunsite.informatik.rwth-aachen.de/Publications/CEUR-WS/Vol-248/paper10.pdf mulig utdatert ?? tror den er fra 2007 
+men klarer ikke å finne datoen den ble publisert. ? er skrevet etter de tingene jeg må sjekke om fortsatt faktisk stemmer)
+Another possible approache would be to use Ripper, which is a language that can make functional (debatable) programs from linked data
+and querie over linked data, where linked data referes to RDF. 
+Ripple is written in RDF, just like we Frog, but Ripple has its own seralization that is based on 
+Turtle. Rippel is also a stack based language and operates on a stream that can contain any number of stacks.
+The reason why using Ripple whould not be an optimal solution is that it dosne't use the same type system and has 
+the same types as OTTR.   
+\\ \\
+Another alternativ approache that is similar to Ripper is Adenine. Adenine is a language that was written for project 
+haystack to more effectively make and mainpulate RDF-data, meaning that it can change the graph directly with e.g. adding 
+new trippels. 
+Adenine is a imperative language that has a syntax that can resemble a combination of Python and lisp.
+There are several reasons why Adenine isn't optimal to use istead of frog. Firstly the types and terms of 
+ottr doesn't match Adenines, in additon Adenine makes it possible to mainpulate and change the graph in it self,
+like adding new tripels, will what we are looking for are a language that has pure functions. Lastly Adenine is 
+imperative while we want a language that are more declarativ. 
 \\ \\
 The reason it still will be nice to have a language like frog that can be used in the template compared to the 
 methodes mention over is that the functions becomes a part of the domain. In additon the methods mention over implies
