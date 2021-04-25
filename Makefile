@@ -1,4 +1,4 @@
-#insperation: https://github.com/eivindbergem/uio-master-thesis-latex-template/blob/master/Makefile
+#inspiration: https://github.com/eivindbergem/uio-master-thesis-latex-template/blob/master/Makefile
 srcfile = master
 pdf = $(srcfile).pdf
 dir = src

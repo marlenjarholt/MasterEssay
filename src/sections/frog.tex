@@ -133,8 +133,11 @@ lambda calculus have the paramtertypes while Frog won't (because for now frog on
 TODO
 
 \subsubsection{Termination}
-TODO
-
+There are several different ways to guarantee termination. As mention in the section about type theory, 
+it is possible to make a type system for a programming language that guarantees termination. However, this often results in less expressive languages. 
+Another approach is to make a set of base functions that can be used to build a new function, as described in the section about combinatory logic. 
+Where the base functions are guaranteed to terminate. The reason why guaranteed termination would be a nice feature in Frog is that a valid OTTR template guarantees termination. 
+Meaning that if Frog does not guarantee termination, OTTR templates that uses Frog functions can not guarantee it either
 
 \subsection{Alternative approaches}
 There are several methods that allready exist to add inffered information to rdf graphs, using function or other methods. 
