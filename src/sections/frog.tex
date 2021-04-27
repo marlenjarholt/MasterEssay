@@ -110,10 +110,17 @@ We also want it to be possible to write lambda-functions or anonym functions str
 the type returned by the function is compatible with the type that the template expects. This means that we have to be able to evaluate from 
 the lambda function what type it will resolve to be. One methode to do this can be to use the same typing rules that are used in 
 simply typed lambda calculus. The difference between simply typed lambda calculus and Frog lambda functions (for now) is that simply typed 
-lambda calculus have the paramtertypes while Frog won't (because for now frog only set parameter types )  TODO
+lambda calculus have the paramtertypes while Frog won't (because for now frog only set parameter types )  
 
-\subsubsection{Functions on lists}
-TODO
+\subsection{Validation of functions}
+At some point, we need to validate the whole function. For the time being, we have only talked about validating that a functions return type matches OTTRs' expected argument type.  OTTR does some validations before expanding an instance. Such as checking that the syntax is correct. Naturally, Frog will also do some validation before OTTR starts to expand the instances. As OTTR, Frog will also check the syntax in advance. In addition, to validating that every used function in the function receives the correct arguments of the correct type. Meaning that if we have a function that uses a function, add, which takes in two terms of type xsd:integer. Then Frog will validate that the arguments given to add is two terms of type xsd:integer. Furthermore, Frog will also validate that the functions' return type is the same as the returned term.
+
+\subsubsection{Div}
+PLAN:
+\begin{itemize}
+    \item Skrive at man vil tilby de "klassikse" funksjonen map, filter og reduce
+    \item Skrive om hvordan funksjonene skal lages, skal vi bruke en code genrator (ulempe: krever vedlikehold), en for hver type (ulempe: tid krevende. Finnes uendlige mange typer), generisk (kan fungere, da kan f.eks. add -funksjonen bli lagd for den mest generiske typen for tall)
+\end{itemize}
 
 \subsubsection{Termination}
 There are several different ways to guarantee termination. As mention in the section about type theory, 
