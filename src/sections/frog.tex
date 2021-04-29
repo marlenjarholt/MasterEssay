@@ -19,15 +19,7 @@ as argument, and returns a ottr:IRI. The ottr template bellow shows the potentia
 the ex-t:Person.
 
 \begin{lstlisting}[frame=single]
-@prefix  ex-p:  <http://example.org/person/> . 
-@prefix ex-r:  <http://example.org/relation/> .
-@prefix ex-t:  <http://example.org/template/> . 
-@prefix ex-f:  <http://example.org/function/> .
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> . 
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ottr: <http://ns.ottr.xyz/0.4/> .
-@prefix o-rdf: <http://tpl.ottr.xyz/rdf/0.1/> .
-
+    
 ex-t:Person [
     ottr:IRI ?person,
     xsd:integer ?age,
@@ -57,10 +49,6 @@ ex-t:person(ex-p:Nina, 6, none, none ,none, ("Nina"@no))
 
 will then be
 \begin{lstlisting}[frame=single, language=turtle]
-@prefix  ex-p:  <http://example.org/person/> . 
-@prefix ex-r:  <http://example.org/relation/> . 
-@prefix xsd: <http://www.w3.org/2001/XMLSchema/#>  . 
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
                 ex-r:hasAge  "22"^^xsd:int ; 
                 ex-r:hasName  "Sebastian"@no, "Bastian"@en ;
