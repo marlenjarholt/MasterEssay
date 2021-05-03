@@ -2,21 +2,16 @@
 \section{Frog}
 
 \subsection{Motivation}
-There are no ways change or mainpulate the terms (lists, liters etc) in OTTR. Imagen that you 
-make a template for storing information about the weather, you have made sevral hundres instances. Say that one of the 
-triples the is made from expanding the template to rdf states somethings temprature in farenheit but you need the temprature in celcius.
-For now you how to change the term, meaning that you have to change the degrees manually (or using a scrip) for every OTTR instances.
-The goal of Frog is to solve this problem with being a programming language written for OTTR where we are abel to change 
-the terms using function. In the farenheit celcius exampel the solution with frog is then to make a function that can be used 
-in the template body to convert the farenheit variable given in the head to celcius. 
-\\ \\
-Having a language like Frog that can make simple functions to mainpulate terms can do more than just convert terms, it can 
-also make it possible to add new inffered information. E.g. if we have the template ex-t:Person from earlier
-and we want to add a tripel to the expanded template containing the information about whether the person is of type adult (ex-p:Adult) or of type child (ex-p:Child). This 
-is information that can be inffered from the age variable, we can make a new rdf-otype with the person as the object, rdf:type as the 
-predicate and the result of the function ex-r:ageToLifeStage as the object. Where ex-r:ageToLifeStage is a frog function that takes in an xsd:integer
-as argument, and returns a ottr:IRI. The ottr template bellow shows the potential use of the frog function in 
-the ex-t:Person.
+The use of OTTR templates proposes some benefits, such as better abstractions and uniform modelling, among other things. OTTR uses template patterns as an abstraction for low-level RDF triples and OWL axioms. Nonetheless, one may say that OTTR has the possibility to abstract even further. For instance, OTTR has no support for making URIs. Before using a template, one then has to make the URIs if they are none existing. Imagine that we have made a template that formally describes a person, with their social security number, name, age. Using the social security number in the URI is natural since this is uniquely identifying. Furthermore, we want to use the template on different sources, such as a tabular document and a CVS document. The template user has to construct the URIs differently in the different sources before using the template. OTTR being able to create the URIs in the template body would then further improve OTTR's benefit of abstraction. Additionally, creating URIs in the template body will benefit uniform modelling because it eases the maintenances. Since changes in the URI structure only have to be done in the template and not in every source.
+
+\para
+Conceptualize that we want to store information about the weather. We want to use several sources for the data, perhaps several different CSV files. Most of the files use Celcius as their temperature scale, but a few of the files stores the temperatures in Fahrenheit. We, however, want to store all the temperature data in one standard temperature scale, namely Celcius. We have to either manually or by using a script before making instances from the data. However, this may be solved in the OTTR templates if it had been possible to do a simple operation on the Fahrenheit degrees. Doing the transformation manually from Fahrenheit to Celcius is time-consuming for big data sets. The second solution is still a solution, but this requires the template user to either know how to make a script for converting the degrees or use an exciting one. Using or making a script may interfere with one of the benefits of using OTTR, namely separation of design and content. Separation of design and content in terms of OTTR means that it separates between the design of the knowledge base, the templates, and the knowledge base's content, the instance. Then the ontology experts can manage templates, and domain experts use familiar tools to create instances. The domain expert is not necessarily an expert on how to use scrips or make them. Ideally, the converting from Fahrenheit to Celcius should then be part of the design of the knowledge base. 
+
+\para
+To solve these issues, we propose a functional language that can make functions to manipulate the terms in OTTR, Frog. If needed, instances in a template body can use a Frog function to manipulate one or several arguments, for instance,  making a URI from a social security number or converting  Fahrenheit to Celcius. As previously mentioned, OTTR has a type system. Therefore, naturally, Frog will use the same type system, resulting in Frog being a typed language with parameter types and a return type.  The benefit of Frog being a types system is that we can perform we still can perform type checking in the templates. It is crucial to note that Frog only can manipulate terms and not change the graph; therefore, Frog will be a purely functional language. The idea is that Frog will have several language similarities to Scheme and other LISP languages and be written in RDF.
+
+\para
+Having a language like Frog also makes it possible to add infeed data. For instance, if we have the template ex-t:Person from earlier and we want to add a tripel to the expanded template containing the information about whether the person is of type adult (ex-p:Adult) or of type child (ex-p:Child). This is information that can be inferred from the age variable. As a result, we can make a new rdf-o:type with the person as the object and the result of the function ex-r:ageToLifeStage as the object. Where ex-r:ageToLifeStage is a Frog function that takes in an xsd:integer as an argument and returns a ottr:IRI. The ottr template below shows the potential use of the frog function in the ex-t:Person.
 
 \begin{lstlisting}[frame=single]
     
