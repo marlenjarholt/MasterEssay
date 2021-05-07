@@ -2,10 +2,10 @@
 \section{Frog}
 
 \subsection{Motivation}
-The use of OTTR templates proposes some benefits, such as better abstractions and uniform modelling, among other things. OTTR uses template patterns as an abstraction for low-level RDF triples and OWL axioms. Nonetheless, one may say that OTTR has the possibility to abstract even further. For instance, OTTR has no support for making URIs. Before using a template, one then has to make the URIs if they are none existing. Imagine that we have made a template that formally describes a person, with their social security number, name, age. Using the social security number in the URI is natural since this is uniquely identifying. Furthermore, we want to use the template on different sources, such as a tabular document and a CVS document. The template user has to construct the URIs differently in the different sources before using the template. OTTR being able to create the URIs in the template body would then further improve OTTR's benefit of abstraction. Additionally, creating URIs in the template body will benefit uniform modelling because it eases the maintenances. Since changes in the URI structure only have to be done in the template and not in every source.
+The use of OTTR templates proposes some benefits, such as better \emph{abstractions} and \emph{uniform modelling}, among other things. OTTR uses template patterns as an abstraction for low-level RDF triples and OWL axioms. Nonetheless, one may say that OTTR has the possibility to abstract even further. For instance, OTTR has no support for making URIs. Before using a template, one then has to make the URIs if they are none existing. Imagine that we have made a template that formally describes a person, with their social security number, name, age. Using the social security number in the URI is natural since this is uniquely identifying. Furthermore, we want to use the template on different sources, such as a tabular document and a CVS document. The template user has to construct the URIs differently in the different sources before using the template. OTTR being able to create the URIs in the template body would then further improve OTTR's benefit of abstraction. Additionally, creating URIs in the template body will benefit uniform modelling because it eases the \emph{maintenances}. Since changes in the URI structure only have to be done in the template and not in every source.
 
 \para
-Conceptualize that we want to store information about the weather. We want to use several sources for the data, perhaps several different CSV files. Most of the files use Celcius as their temperature scale, but a few of the files stores the temperatures in Fahrenheit. We, however, want to store all the temperature data in one standard temperature scale, namely Celcius. We have to either manually or by using a script before making instances from the data. However, this may be solved in the OTTR templates if it had been possible to do a simple operation on the Fahrenheit degrees. Doing the transformation manually from Fahrenheit to Celcius is time-consuming for big data sets. The second solution is still a solution, but this requires the template user to either know how to make a script for converting the degrees or use an exciting one. Using or making a script may interfere with one of the benefits of using OTTR, namely separation of design and content. Separation of design and content in terms of OTTR means that it separates between the design of the knowledge base, the templates, and the knowledge base's content, the instance. Then the ontology experts can manage templates, and domain experts use familiar tools to create instances. The domain expert is not necessarily an expert on how to use scrips or make them. Ideally, the converting from Fahrenheit to Celcius should then be part of the design of the knowledge base. 
+Conceptualize that we want to store information about the weather. We want to use several sources for the data, perhaps several different CSV files. Most of the files use Celcius as their temperature scale, but a few of the files stores the temperatures in Fahrenheit. We, however, want to store all the temperature data in one standard temperature scale, namely Celcius. We have to either manually or by using a script convert Fahrenheit to Celcius before making instances from the data. However, this may be solved in the OTTR templates if it had been possible to do a simple operation on the Fahrenheit degrees. Doing the transformation manually from Fahrenheit to Celcius is time-consuming for big data sets. The second solution is still a solution, but this requires the template user to either know how to make a script for converting the degrees or use an exciting one. Using or making a script may interfere with one of the benefits of using OTTR, namely \emph{separation of design and content}. Separation of design and content in terms of OTTR means that it separates between the design of the knowledge base, the templates, and the knowledge base's content, the instance. Then the ontology experts can manage templates, and domain experts use familiar tools to create instances. The domain expert is not necessarily an expert on how to use scrips or make them. Ideally, the converting from Fahrenheit to Celcius should then be part of the design of the knowledge base. 
 
 \para
 To solve these issues, we propose a functional language that can make functions to manipulate the terms in OTTR, Frog. If needed, instances in a template body can use a Frog function to manipulate one or several arguments, for instance,  making a URI from a social security number or converting  Fahrenheit to Celcius. As previously mentioned, OTTR has a type system. Therefore, naturally, Frog will use the same type system, resulting in Frog being a typed language with parameter types and a return type.  The benefit of Frog being a types system is that we can perform we still can perform type checking in the templates. It is crucial to note that Frog only can manipulate terms and not change the graph; therefore, Frog will be a purely functional language. The idea is that Frog will have several language similarities to Scheme and other LISP languages and be written in RDF.
@@ -80,7 +80,7 @@ Frog's syntax has some properties that needs to be fulfilled:
     \item The body of the function shall be build up by list, like the LISP languages
 \end{enumerate}
 
-
+\subsubsection{Proposed semantics}
 
 \subsubsection{Evaluation}
 The evaluation plan is to use a lazy evaluation approach. Lazy evaluation will be used in the functions themselves and decide when we are supposed to evaluate it in the OTTR template. The result is that lazy evaluation will ensure that the evaluation of a function only is performed when the function reaches a base template (like ottr:Tripple). Why lazy evaluation is a better approach than eager evaluation, in this case, is that OTTR does not force a user to use all variables in the template, even though OTTR throws a warning. Therefore, using lazy evaluation would mean that we only evaluate functions that OTTR uses. Using lazy evaluation as an evaluation strategy will also add memorization. The reason why lazy evaluating is a good idea, in this case, is that when we have no way of knowing when calling an instance with a function as one of the arguments (if it is not a base template), how many times this value would end up in a base template. Lazy evaluation would then make sure that the function only is evaluated once for this function call and only if the value of the function ever is needed. Additionally, using a lazy evaluation approach will make it possible, as previously mentioned, to add features like streams. In general, using lazy evaluation will also make Frog more declarative.  
@@ -95,7 +95,7 @@ the lambda function what type it will resolve to be. One methode to do this can 
 simply typed lambda calculus. The difference between simply typed lambda calculus and Frog lambda functions (for now) is that simply typed 
 lambda calculus have the paramtertypes while Frog won't (because for now frog only set parameter types )  
 
-\subsection{Validation of functions}
+\subsubsection{Validation of functions}
 At some point, we need to validate the whole function. For the time being, we have only talked about validating that a functions return type matches OTTRs' expected argument type.  OTTR does some validations before expanding an instance. Such as checking that the syntax is correct. Naturally, Frog will also do some validation before OTTR starts to expand the instances. As OTTR, Frog will also check the syntax in advance. In addition, to validating that every used function in the function receives the correct arguments of the correct type. Meaning that if we have a function that uses a function, add, which takes in two terms of type xsd:integer. Then Frog will validate that the arguments given to add is two terms of type xsd:integer. Furthermore, Frog will also validate that the functions' return type is the same as the returned term.
 
 \subsubsection{Div}
@@ -113,52 +113,62 @@ Where the base functions are guaranteed to terminate. The reason why guaranteed 
 Meaning that if Frog does not guarantee termination, OTTR templates that uses Frog functions can not guarantee it either
 
 \subsection{Alternative approaches}
-There are several methods that allready exist to add inffered information to rdf graphs, using function or other methods. 
-One way you can do this is with SPARQL, which is a query language over RDF with many similarities to SQL for relational 
-databases e.g. that they have SELECT, WHERE, GROUP BY, etc, that are build up in a similar fashion. In SPARQL you can use 
-a INSERT DATA clause which insert the data in the field in to the graph, combind with a WHERE-clause, and possible a BIND. 
-In sparql BIND allows values to be assing to a veriable, meaning that we can make simple functions and bind the result of 
-the function to a variable, which again can be used in INSERT DATA clause to add it to the rdf graph. The example that was
-described earlier, with converting farenheit to celcius can then be done by using this technique (but here we'll end up with a 
-triple with both celcius and farenheit is we don't delete the farenheit afterwards). 
-\\ \\
-An other alternative to Frog and it's functionalty is OWL. OWL is a Semantic Web language that are made for representing complex 
-knowledge, and it's based on logic. In owl we can define the descriptions of classes. Then can use already existing 
-predicates and classes to define new ones from inffered information. E.g in the example mention eariler where we defined in the template
-with a frog function, wheter the type of the object was child or an adult. This could have been done with modelling in OWL. If we say that  
-ex-p:Adult as everthing that has age bigger then 17 and ex-p:Child as everything that has age equal or bigger then 17.
-\\ \\
-The last method used in the semanitc web we will mention is SWRL, which is a proposed language for semanitc web. SWRL can be used 
-to express rules and logic, and is a compination of OWL and a subset of Rule Markup language. SWRL also offers several function 
-which can be used on different types (from, rdf, xsd, and owl), but we can not make our own functions, only use the ones that 
-SWRL has defined. SWRL is build up with a body that are a set of conditions and a head which is the consequences of the
-conditions. Yhe exampel from eariler where we either added the type ex-p:Child or ex-p:Adult can be solved in SWRL with 
-making two rules, one for ex-p:Child and one for ex-p:Adult. In the rulte for ex-p:Child we need two condtions on which 
-state that the person has an age and one which checks that the age is less than 18 (for this we can use the SWRL function
-swrl:lessThan), the conclution of this rule is that the type of the person is ex-p:Child. The ex-p:Adult rule will look 
-similar, the conditions will be that the person has an age and that the age is greater then 17 (using the SWRL function 
-swrl:greaterThan) and that has the condition that the person has type ex-p:Adult. We can also express the converting from farenheit
-to celcius with SWRL using the condition that it has a farenheit temparture and a combination of math functions offerd by SWRL to 
-make the conversion as an condition.
-\\ \\
-(Source: http://sunsite.informatik.rwth-aachen.de/Publications/CEUR-WS/Vol-248/paper10.pdf mulig utdatert ?? tror den er fra 2007 
-men klarer ikke å finne datoen den ble publisert. ? er skrevet etter de tingene jeg må sjekke om fortsatt faktisk stemmer)
-Another possible approache would be to use Ripper, which is a language that can make functional (debatable) programs from linked data
-and querie over linked data, where linked data referes to RDF. 
-Ripple is written in RDF, just like we Frog, but Ripple has its own seralization that is based on 
-Turtle. Rippel is also a stack based language and operates on a stream that can contain any number of stacks.
-The reason why using Ripple whould not be an optimal solution is that it dosne't use the same type system and has 
-the same types as OTTR.   
-\\ \\
-Another alternativ approache that is similar to Ripper is Adenine. Adenine is a language that was written for project 
-haystack to more effectively make and mainpulate RDF-data, meaning that it can change the graph directly with e.g. adding 
-new trippels. 
-Adenine is a imperative language that has a syntax that can resemble a combination of Python and lisp.
-There are several reasons why Adenine isn't optimal to use istead of frog. Firstly the types and terms of 
-ottr doesn't match Adenines, in additon Adenine makes it possible to mainpulate and change the graph in it self,
-like adding new tripels, will what we are looking for are a language that has pure functions. Lastly Adenine is 
-imperative while we want a language that are more declarativ. 
-\\ \\
+In this section, we will propose alternative approaches to Frog.  We group the approaches into two groups.  Firstly, we will consider how we can utilise different semantic technologies, namely SPARQL, OWL, and SWRL,  on the expanded OTTR template to yield the same result compared to Frog in some cases. Additionally, we will propose a way to solve some of the example issues presented in the motivation section using these semantic technologies.  Secondly, we will discuss two different languages for doing computation on RDF, Ripple and RDF, and how these may be an alternative to Frog. 
+
+\subsubsection{SPARQL}
+SPARQL is a query language over RDF with many similarities to SQL for relational databases, such as SELECT, WHERE, and GROUP BY. These clauses are also build up similarly in SPARQL and SQL.  Like SQL, SPARQL also offers clauses to delete data from the graph and insert data. Additionally, SPARQL also offers BIND, which allows us to assign values to a variable. Consequently, BIND makes it possible to make simple functions and bind the result of the function to a variable. Using a combination of an insert clause and BIND will then make it possible to add data to the graph from calculations.
+
+\para
+In the section about the motivation for making Frog, we described an example where we only wanted to store degrees in Celcius. However, some of the sources used Fahrenheit, resulting in a needed conversion. A possible solution to this problem, and similar ones, is to use SPARQL. Firstly we can make the triples using OTTR. Secondly, make a BIND that converts the existing Fahrenheit degrees to Celcius and use an insert clause to add the Celcius degree to the graph. Lastly, use a delete clause to delete all the triples which contain the degrees in Fahrenheit.
+
+\para
+Using SPARQL instead of a FROG function can yield the same result, meaning that SPARQL could be an alternative approach to FROG. However, in addition to SPARQL demanding more steps to get the same result, this technic does not preserve the benefit of abstraction as good as FROG. Having several steps may also result in more maintenance. In addition, one of FROG goals is that we only can manipulate the terms and not the whole graph. Using SPARQL, on the other hand, will manipulate the graph and not only the term. Consequently, using SPARQL as an alternative would not preserve the benefits of using FROG.   
+
+
+\subsubsection{OWL}
+Web Ontology Language (OWL) is an ontology language for the Semantic web, based on description logic. OWL provides us with classes, data properties, object properties, and instances. In addition, OWL defines ways to model classes, properties, and instances using logic. Among other things, OWL makes it feasible to model role restrictions. Role restrictions let us model classes as a set of objects that either only (universal restriction) have a role to a given set or has some (existential restriction) role to a given set.  With role descriptions and OWL, one can, for instance, express that a student takes some courses or that all plants only drink water. OWL also provides cardinality on roles, making it possible to express that all cats have four paws, for instance.
+
+\para
+Combined with reasoning, OWL can add infeed data to a graph. If we take the life stage example from the motivation section, one can make an ontology with OWL that states that all ex-p:Adult has some age greater than 17, and all ex-p:Child has some age less than 18—giving the persons the correct type.
+
+\para 
+To conclude, OWL can add inferred data to the graph. However, this is not the primary goal of Frog, which is to perform manipulation on terms, but more an additional feature. Moreover, using OWL has restrictions. We could not, for instance, use OWL to model that something with age over 17 has the ex-r:lifeStage ex-p:Adult. Meaning that OWL expects the data structured. Frog, on the other side, only works on the terms. Additionally, making function, or do computations on terms, is not possible with OWL. TODO: Legge til at det fjerner abstraction, og at ottr er "lagd" for å kunne lage axioms. 
+
+\subsubsection{SWRL}
+SWRL is a proposed language for the semantic web. SWRL can express rules and logic, combining OWL and a subset of Rule Markup language. In addition, SWRL also offers several functions that can we can use on different types, such as xsd:integer. However, SWRL does not allow us to make new functions only use predefined ones. Furthermore, an SWRL statement has two parts, a body and a head. The body is a set of conditions, while the head is the consequence of the conditions.
+
+\para
+Moreover, we can use SWRL to solve the life stage example and the Fahrenheit to Celcius example and similar problems. First, in the life stage example, we need to make two rules, one for the adult and one for the child. The first conditions are equal for both rules, namely that one has an age. In addition, the rule concluding in the rdf:type being ex-p:Child needs a condition stating that the age is less than 18, using the swrl:lessThan function. Concluding that the rdf:type is ex-p:Adult, on the other side, needs a second condition declaring that the age is greater than 17, using swrl:greaterThan. Likewise, SWRL can convert the Fahrenheit degree to Celcius, where we, in the conclusion, could combine several math functions offered by SWRL to convert the degree.
+
+\para
+\begin{itemize}
+    \item Skrive om hvordan SWRL lar oss gjøre mye av det vi er ute etter
+    \item Vi kan ikke gjøre utregninger på noe som trenges under OTTR templatet
+    \item Alle kalkulasjoner må gjøres etter at instansen er expanded 
+    \item maintenance og abstraction
+    \item ottr har ikke noe rule language, selv om frog ikke er et rule language kan man bruke det til å lage regler. 
+\end{itemize}
+
+\subsubsection{Ripper}
+Ripple is a functional, stack-based query language that allows us to both make queries and functions that we can use on RDF. Ripples interface has two different statements: making queries and making what they call commands or directives. Combining the command, define, and querying can make functions.   
+
+\para
+Ripple has numerous similarities to Frog, such as being functional, using lazy evaluation and using a nested list structure. Compared to the semantic technologies, making a function call using a Ripple function inside an OTTR template may be possible. As a result, making necessary calculations before expanding the instances, such as making a URI, is possible. However, using Ripple as an alternative may yield one problem: different typing and term systems. Meaning that, for instance, checking that a return type matches the expected type of the argument may be difficult. These problems may be complicated to solve for the OTTR specific types like the LUB and list types.    
+
+\subsubsection{Adenine}
+Another alternative approach that is similar to Ripper is Adenine. Adenine is a language written for project Haystack to more effectively make and manipulate RDF-data, meaning that it can change the graph directly with, e.g. adding new tripels. Adenine is an imperative language that has a syntax that can resemble a combination of Python and lisp. 
+
+\para
+Like Ripper, one of the problems for using Adenine as an alternative approach is that OTTR and Adenine do not utilise the same type or term system. Additionally, Adenine does not change or manipulate terms but whole graphs. Consequently, Adenine needs, similar to the semantic technologies, to work on the expanded OTTR instances. Working on the expanded instances has mainly two consequences. Firstly, making functions that return a value that OTTR needs to expand the instances, like making URIs, is impossible. Secondly, this may not improve   TODO: hvordan dette kan "ødlegge" for abstractions
+
+\subsubsection{Summarisation}
+\begin{itemize}
+    \item Snakke om de to hoved approchene
+    \item Forklare hvorfor Adenine og Ripper ikke fungerer, mtp at det vi bruker Frog i OTTR ikke er rdf men termer
+    \item 
+\end{itemize}
+
+\subsubsection{OLD STUFF}
 The reason it still will be nice to have a language like frog that can be used in the template compared to the 
 methodes mention over is that the functions becomes a part of the domain. In additon the methods mention over implies
 that we have to add the inffered information before using template. Frog on the other side will offer the abilities to 
@@ -170,3 +180,5 @@ The benefits of making a whole new language like Frog for making functions inste
 that is that the types used in frog matches the types in OTTR (in additon to frog doing type checking) meaning that 
 the we don't need to transelate types from one type system to another (from the scripting language to OTTR). This means 
 that frog probably will be less error-prone than using a scripting language.
+
+\subsection{Summary}
