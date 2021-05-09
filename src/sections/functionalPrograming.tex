@@ -150,6 +150,7 @@ $\textbf{B=(S(K S)K)}$\\
 $\textbf{C=(S(S(K(S(K S)K))S)(K K))}$\\
 
 \subsection{Type theory}
+\label{type theory}
 Type theory is the academic study of \emph{type systems}, which gives every term a type. The type determines the meaning, and which operations are possible to perform on a term. Lambda Calculus has its own type system, also made by Alonzo Church called \emph{Simply Typed Lambda Calculus}, which we discuss in \autoref{Simply Typed Lambda Calculus}.
 
 \para
@@ -184,14 +185,12 @@ The decision problem of type \textbf{inhabitation} (abbreviated by ($ \exists e.
 
 \subsection{Simply Typed Lambda Calculus}
 \label{Simply Typed Lambda Calculus}
-As earlier mention, Simply Typed Lambda Calculus 
-($\lambda^\rightarrow$) is a Type Theory developed by Alonzo Church for $\lambda$-calculus. \\ \\
-In $\lambda^\rightarrow$, we can make types with only one operator $\rightarrow$ and a set of base types,
- often denoted with $B$. From the base types, $B$, we can construct new types using the constructor 
- $\rightarrow$. The result of a type system having the two base types $\tau$ and $\sigma$ is that the type system can construct a new type $\tau \rightarrow \sigma$. This type would refer to a function that takes in an argument of type $\tau$ and returns a term of type $\sigma$. \\ \\
-The syntax for $\lambda^\rightarrow$ are more or less equal to \nameref{Lambda Calculus}s syntax, except that we need to specify the type of a variable in the function (in the abstraction).
-The specification is done in the way described in \nameref{Type Theory} with $x:\tau$ for a variable $x$ with type $\tau$. Furthermore, Simply typed lambda calculus also adds term constant, often denoted with a $c$. The full syntax for 
-Simply Typed Lambda Calculus is shown in the table \nameref{tab:STLC syntax} \\
+As we mention in \autoref{type theory}, Simply Typed Lambda Calculus($\lambda^\rightarrow$) is a Type Theory developed by Alonzo Church for lambda-calculus. In $\lambda^\rightarrow$, we can make types with only one constructor $\rightarrow$ and a set of base types, frequently denoted with a $B$. Thus, we can construct new types from the base types, $B$, combined with constructor $\rightarrow$. Using base types $\tau$ and $\sigma$, for instance, make it possible to construct type $\tau \rightarrow \sigma$. $\tau \rightarrow \sigma$ refers to a function that takes in a term of type $\tau$ and returns a term of type $\sigma$, such as: $\lambda x:\tau. y \; \tau \rightarrow \sigma$. 
+
+
+\para
+The syntax for Simply Typed Lambda Calculus is almost identical to Lambda Calculus, with the difference being that we need to define the variables' type in the abstraction. Simply Typed Lambda Calculus similarly specifies the variables' type as in type theory, with $x:\tau$ for a variable $x$ with type $\tau$. In addition, Simply typed lambda calculus adds a set of term constants for the base types, often denoted with a $c$. \autoref{tab:STLC syntax} shows the complete syntax for Simply Typed Lambda Calculus.
+
 
 \begin{table}[]
     \centering
@@ -206,108 +205,66 @@ Simply Typed Lambda Calculus is shown in the table \nameref{tab:STLC syntax} \\
 \end{table}
 
 \subsubsection{Typing rules}
-In Simply Typed Lambda Calculus, we have four typing rules. 
-To state these rules, we need to use the typing environment described in the section about \nameref{Type Theory}.
+Simply Typed Lambda Calculus has four typing rules. To state these rules, Simply Typed Lambda Calculus uses the typing environment we define in \autoref{type theory}. The four typing rules are:
 
 \begin{enumerate}
     \item If we have variable $x$ that is of type $\tau$ in the typing environment $\Upgamma$, then we know that $x$ has type $\tau$.
     \item If we have a constant $c$ of type $T$ in the typing environment $\Upgamma$, then we know that $c$ has type $T$.
-    \item If we have a variable $x$ that is of type $\tau$ in a type environment, and with a term $e$ of type $\sigma$ in the same type environment, then we have a term $\lambda x\tau .e$ with the type $\tau \rightarrow \sigma$ in the same type environment.
-    \item If we have a term $M$ of type $\tau \rightarrow \sigma$ and a term $N$ of type $\tau$ in an typing environment, then $M N$ will have the type $\sigma$ in the same typing environment.
+    \item If we have a variable $x$ of type $\tau$ in a type environment $\Upgamma$, and a term $e$ of type $\sigma$ in $\Upgamma$; then we have a term $\lambda x\tau .e$ with the type $\tau \rightarrow \sigma$ in $\Upgamma$.
+    \item If we have a term $M$ of type $\tau \rightarrow \sigma$ and a term $N$ of type $\tau$ in an typing environment $\Upgamma$; then $M N$ will have the type $\sigma$ in $\Upgamma$.
 \end{enumerate}
 
 \subsubsection{Reduction of Simply Typed Lambda Calculus}
-Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as mention in the section about \nameref{Lambda Calculus}. 
-Additional, the reduction needs to check that the arguments to the function have 
-the right type in typing environment as well. 
+Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as \autoref{Lambda Calculus} mention. Additionally, the reduction needs to check that the arguments to the function have the right type in typing environment. 
+
+\para
+To give an example of $\beta$-reduction, we first need to make a set of the base types. In this case, we only use $Int$, the collection of all-natural numbers. From $Int$, it is possible to make an unlimited set of types, such as $Int$, $Int \rightarrow Int$, $Int \rightarrow Int \rightarrow Int$. For the sake of this example, we add the operation $+$ that adds two numbers together. We use the term $e_1:= \lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int$. The type $Int \rightarrow Int \rightarrow Int$ is a term that takes in an Int and returns a term that takes in an $Int$ and returns an $Int$. Applying $e_2 := 3:Int$ with the third typing rule on the term $e_1$, $e_1 e_2$ results in the term $e_1 e_2$ with the type $Int \rightarrow Int$. This type describes a term that taks in a Int and returns a Int, which we can be prove using $\beta$-reduction on the term:
 \\ \\
-To give an example of $\beta$-reduction, we first need to make a set of the base types. In this case, we will only use $Int$, the collection of all-natural numbers. 
-From $Int$, it is possible to make an unlimited set of types ($Int, Int \rightarrow Int, Int \rightarrow Int \rightarrow Int$ etc).
-For the sake of this example, we will add the operation $+$ that adds to numbers together.
-We will use the term $e_1:= \lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int$. The type $Int \rightarrow Int \rightarrow Int$ in writing would be "a term
-which takes in an Int and returns a term which takes in an Int and returns an Int". 
-Applying $e_2 := 3:Int$ with the third typing rule on 
-the term $e_1$, $e_1 e_2$ will result in the term  
-$e_1 e_2$ with the type $Int \rightarrow Int$ (taking in a Int and returning a Int). This can be proved using $\beta$-reduction on the term:
-\\ \\
-$e_1 e_2 := \lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int\; 3:Int 
+$e_1 e_2 := (\lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int)\; 3:Int 
 \newline\rightarrow_\beta \lambda y:Int. + 3\; y: Int \rightarrow Int$
 \\ \\
-Using the third typing rule again, applying 
-$e_3 := 7:Int$ on the term $e_1 e_2:Int \rightarrow Int$ will result in the term $e_1 e_2 e_3$ with the type $Int$.
-The $\beta$ reduction also proves this: 
+Again, using the third typing rule and applying $e_3 := 7:Int$ on the term $e_1 e_2:Int \rightarrow Int$ results in the term $e_1 e_2 e_3$ with the type $Int$, proven by $\beta$ reduction: 
 \\ \\
-$e_1 e_2 e_3 := \lambda y:Int. + 3\; y: Int \rightarrow Int \; 7:Int
+$e_1 e_2 e_3 := (\lambda y:Int. + 3\; y: Int \rightarrow Int) \; 7:Int
 \newline \rightarrow_\beta + 3:int \; 7:Int = 10$
 
 \subsection{Evaluation strategies}
-An \textit{evaluation strategy} is a strategy used in programming languages to decide when a programming language should evaluate an expression. 
-Meaning that the evaluation strategy, for example, chooses whether the programming language evaluates the arguments of a function before it is called or 
-if the whole expression is sent in to be evaluated at a later stage. Evaluation strategy has two main strategies \textbf{eager evaluation} (strict evaluation) 
-and \textbf{non-strict evaluation}. To briefly explain, eager evaluation will evaluate the expression as soon as it is bound. 
-One of the main differences between eager evaluation and non-strict evaluation is that eager evaluation, on the one hand, 
-would evaluate every argument before the function call. While in non-strict evaluation, on the other hand, 
-the programming language evaluates the expression when it is used. 
-Meaning that eager evaluation will evaluate the arguments of a function, although the arguments may never be used. 
-Non-strict evaluation can also have an infinite list, also called streams, since only the element in the list which is used are calculated. 
-One negative aspect of non-strict evaluation is that an expression used $n$ times will end up being evaluated $n$ times. 
-\\ \\
-Most Imperative programming languages use an eager evaluation. The reason why eager evaluation is the most practised evaluation strategies in 
-imperative programming languages is that it is easier to avoid unexpected behaviour. Additional to being easier to debug compared to non-strict evaluation. 
-One can also have some difficulties using imperative features like I/O and exception handling when using a non-strict evaluation strategy. 
-Although most imperative languages use eager evaluation, they often utilise some non-strict evaluation methods. A good example of this is the if-statement, 
-where most languages only will evaluate the part of the if-statement that is true. The pseudo-code $if\; a\; then\; b\; else\; c$, will only evaluate b if a is evaluates to be true. 
-c, on the other hand, will only be evaluated if a is false. However, if the if-statement is put in a function and use $a$ $b$ and $c$ as arguments 
-like this $f(a, b,c):= \; if\; a\; then\; b\; else\; c$ then eager evaluation will evaluate all the expressions before the functions start. 
-Despite that, the programming language only needs to evaluate either $b$ or $c$. While non-strict evaluation, on the other hand,  only evaluates the used expressions.
-\\ \\
-\textbf{Lazy evaluation} (also know as call-by-need) is a type of non-strict evaluation that Functional programming often uses. Since Lazy evaluation is a type of non-strict evaluation, 
-it evaluates the expression when it is used. What separating lazy evaluation from the other types of non-strict evaluation, such as call-by-name,
-is that Lazy evaluation also uses memorisation to avoid repeated evaluations, reducing the running time. Memorisation uses a look-up table where the evaluated value of a function for some given arguments is stored. 
-When the evaluation is executed on an expression, lazy evaluation first checks if it already exists in the look-up table. If the value exists, 
-it is retrieved from the table. However, if the value is not in the look-up table, lazy evaluation evaluates the function to a value and appends this value to the table.
-\textbf{Graph reductuion} is an efficient technique for implementing lazy evaluation using the outermost tree reduction method.
-\\ \\
-Figure \nameref{fig:strictVSLazy} is  an example of strict evaluation and lazy evaluation with $\beta$-reduction. Assuming that print is a term that prints the argument to the terminal 
-and that + - and * are operators that work on integers. Some differences are important to note:
+\emph{Evaluation strategies} are a collection of strategies that decides when a programming language should evaluate an expression. An evaluation strategy chooses, among other things, if the language should evaluate expressions sent into a function before executing the function or send in these expressions and evaluate them at a later stage.
+
+\para
+Evaluation strategy has two main strategies \emph{eager evaluation} (strict evaluation) and \emph{non-strict evaluation}. To briefly explain, the eager evaluation evaluates the expression as soon as it is bound, while the non-strict evaluation evaluates the expression as soon as it is utilised.Meaning that eager evaluation evaluates arguments of a function, although these arguments may never be used. Non-strict evaluation can also handle infinite lists, also called streams, because non-strict evaluation only evaluates elements that are used. In this case, the eager evaluation would evaluate forever. Additionally, the eager evaluation evaluates the expression as soon it is bound. Therefore, eager evaluation only evaluates an expression once, regardless of how many times a program utilises it. Non-strict evaluation, on the other hand, ends up evaluating the exact expression n times, where n is how many times the expression is used.
+
+\para
+Most Imperative programming languages use eager evaluation because it is easy to avoid unexpected behaviour and conduct debugging compared to non-strict evaluation. It may be challenging to use imperative features like I/O and exception handling when using a non-strict evaluation strategy due to state handling. Although most imperative languages use eager evaluation, they often utilise some non-strict evaluation methods. An excellent example of this is the if-statement. In most languages, the if-statement only evaluates the part of the statement that is true. For instance, the pseudo-code, $if\; a\; then\; b\; else\; c$, will only evaluate $b$ if $a$ evaluates to be true. $c$, on the other hand, will only be evaluated if $a$ is false. However, suppose the if-statement is put into a function and use $a$, $b$, and $c$ as arguments, like $f(a, b,c):= \; if\; a\; then\; b\; else\; c$. In that case, the eager evaluation evaluates all the expressions before running the function; despite that, the programming language only needs to evaluate either $b$ or $c$. While non-strict evaluation, on the other hand, only evaluates the used expressions.
+
+\para
+\emph{Lazy evaluation}, also known as call-by-need, is a type of non-strict evaluation often used by functional programming. The result of lazy evaluation being a type of non-strict evaluation is that lazy evaluation evaluates the expression when used. What separates lazy evaluation from the other types of non-strict evaluation, such as call-by-name, is that lazy evaluation also uses memorisation to avoid repeated evaluations.  Memorisation uses a look-up table where the evaluated value of a function for some given arguments is stored.  When lazy evaluation evaluates an expression, it first checks if the expression already exists in the look-up table. If the value exists, lazy evaluation retrieves the value from the table. However, if the value is not present in the look-up table, lazy evaluation evaluates the function to a value and appends this value to the table. 
+
+\para
+\autoref{fig:strictVSLazy} is an example of strict evaluation and lazy evaluation with b-reduction. Note the following significant differences between these two approaches in this example:
 
 \begin{itemize}
-    \item Strict evaluation will evaluate an expression(terms) as soon as it is bound. While lazy evaluation waits until the expression is used.
-    \item Strict evaluation evaluates the expressions(terms) before sending them in, while we in lazy evaluation send in the whole expression ref. $(\lambda x.\lambda y. - x y)\; 4 \; 2$. Since the $y$ is not used anywhere in the function body, the result is that strict evaluation ends up evaluating something that never is used.
-    \item On the last two lines, lazy evaluation uses memorisation and the look-up table to retrieve the return value instead of evaluating it.
+    \item Strict evaluation evaluates an expression (terms) as soon as it is bound. In contrast, lazy evaluation waits until the expression is used.
+    \item Strict evaluation evaluates the expressions (terms) before sending them into the term, while lazy evaluation takes in the whole expression.
+    \item On the last two lines in \autoref{fig:strictVSLazy}, lazy evaluation uses memorisation to retrieve the return value rather than evaluating it.
 \end{itemize}
 
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.25]{strictVSLazy.png}
-    \caption{Shows the difference between strict evaluation and lazy evaluation. Here we assume that print is a term which 
-    prints the argument to the terminal, and that + - and * are operators that work on integers}
+    \caption{Shows the difference between strict evaluation and lazy evaluation. Here we assume that print is a term which prints the argument to the terminal, and that +, -, and * are operators that work on integers}
     \label{fig:strictVSLazy}
 \end{figure}
 
-\subsection{Undecided title (Practical use of functional programming)}
-Several of the theoretical foundations mention earlier
-influence how the different functional programming languages (and non-functional language, for that matter) are built up.
-\\ \\
-Functional programming is a programming paradigm that is made by applying and composing functions. Furthermore, 
-functional programming is inspired by a combination of \nameref{Lambda Calculus}, types and definitions. We see \nameref{Lambda Calculus} different impacts in several
-of the concepts in functional programming. 
-First off, functional programming uses high-order functions, which are functions that can take in functions as arguments
-and return a function. In other words, functional programming allows functions to be both an argument and a return value of a function. 
-The use of high-order functions is something that we see in lambda calculus as well. Some well known high-order functions are map 
-(which takes in a function taking in one argument and a list and applies the function on every element, returning 
-a new list with every element in the original list mapped), 
-filter(which takes in a function with one argument and a list and applies it to each element of the list, the function should return a boolean and returns a new list with only the elements
-that returned true in the function), and reduce also called fold (which recursively applies the function given as the first argument to the next ones). 
-The use of high-order functions in functional programming enables partial application or currying. Partial application or currying is a technique
-where every argument to a function is applied simultaneously, from the first one to the last one. 
-\\ \\
-From the 70s, functional programming started to add type systems in their programming languages,
-using typed lambda calculus, where \nameref{Simply Typed Lambda Calculus} is a type of typed lambda calculus. 
-The reason for using typed lambda calculus is that it makes the program more reliable because it enables improved compile-time type checking.  
-\\ \\
-Two other important concepts in functional programming are Pure function and recursion. Pure functions are a function without any side effects. 
-Meaning that the programming language, among other things, can assure that a function always will return the same answers as long as the arguments have no side effects. A programming language that does not allow 
-side effects make it more optimal to use memorization because we know that a function is given to an argument always will yield the same answer 
-making it suitable for an evaluation strategy like Lazy evaluation.
+\subsection{Practical use of functional programming}
+\emph{Functional programming} is a programming paradigm that is made by applying and composing functions. Furthermore, functional programming is inspired by Lambda Calculus definitions. First off, functional programming uses high-order functions, which are functions that can take in functions as arguments and also return a function. In other words, functional programming allows functions to be both an argument and a return value of a function. High-order functions in functional programming enable partial application, also called currying, a technique where every argument to a function is applied sequentially. Partial application applies the function to its argument where each application makes a new function that accepts the next argument.
+
+\para
+Some well known high-order functions are map and filter. Map takes a list and a transformation function and returns a new list. Furthermore, map applies the transformation function on each element and adds the result of each transformation to the new list. On the other hand, the filter function takes in a list and a function and applies a subset of the original list to the new list. The filter requires that this transformation function returns a boolean, which indicates if the filter should include the current element in the new list.
+
+\para
+Two other important concepts in functional programming are \emph{pure function} and \emph{recursion}. Pure functions are functions without any side effects. The result of using a pure function, among other things, is that the same set of arguments always yields the same return value. A programming language that does not allow any side effects is called a pure programming language. A pure functional programming language will only accept functions without any side effects, resulting in only pure functions. Therefore, it is optimal to use memorisation because we know, as mentioned, that the same set of arguments given to a function always produces the same return value. On the contrary, using memoisation in an impure programming language may be unreliable since it is possible that calling the same function multiple times may not yield the same return value. 
+
+\para
+From the 1970s, functional programming started to add type systems in their programming languages, using typed lambda calculus. The reason for using typed lambda calculus is that it makes the program more reliable because it enables compile-time type verification because untyped lambda calculus may yield false-negative errors. 
