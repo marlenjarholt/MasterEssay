@@ -56,21 +56,10 @@ ex-p:Nina ex-r:hasAge  "6"^^xsd:int ;
 \end{lstlisting}
 
 \subsection{Plans for Frog}
-The plan is that frog is a language that is written in RDF. In addition to being a high-order functional language, 
-with only pure functions. 
-Frog will also have a type system, which we will come back to, and it should be clear form the definition of 
-the function what the type of the different parameters are and the type of the return value. 
-A frog function can only take in arguments and an return values that are a type from the OTTR type system, 
-meaning that frog will have the same type system as OTTR and the same term system as OTTR.
-The advantage of this is that frog can do type checking, since a function has a return value we can check that 
-the type of the return value is of the same type that the argument in the instance needs to be.
-Since frog is supposed to be a high-order language and will have the same type system as OTTR  
-we need to add a new type to the OTTR type system, namely a function type that we need to give to every frog function. 
-There is one exception to frog being high-order and that is that a function that is used directly in a 
-template (like ex-f:ageToLifeStage in ex-t:Person) aren't allowed to return a function type. Due to addiong a new 
-fnction type in the OTTR type system we also need to add terms that maches the new type. 
+Frog is a high-order function programming language, only allowing pure function. Furthermore, Frog utilises RDF for expressing its syntax. We amplify Frogs syntax in section \label{frog syntax}. Frogs goal is to make it feasible to manipulate the terms in the OTTR template body using Frog functions. In addition, Frog has two types of functions, one type that is named and anonymous function, making it possible to write anonymous functions straight into the OTTR template body. However, we specify the named functions in an other file, and OTTR can then use the function in the OTTR template body. Since Frog is a part of the OTTR framework, it will use the same type system and term system as Frog. Frog requires that we state the return type of the function and the types of the parameter explicitly, meaning that Frog is a typed programming language. We further elaborate on the use of types in Frog in \autoref{types in frog}.
 
 \subsubsection{Proposed syntax}
+\label{frog syntax}
 Frog's syntax has some properties that needs to be fulfilled: 
 \begin{enumerate}
     \item The language shall be written in RDF 
@@ -81,25 +70,48 @@ Frog's syntax has some properties that needs to be fulfilled:
 \end{enumerate}
 
 \subsubsection{Proposed semantics}
+\begin{enumerate}
+    \item riktig bruke av termer 
+    \item at det funksjonen sier at typen til det en returner faktiks er riktig
+\end{enumerate}
 
 \subsubsection{Evaluation}
-The evaluation plan is to use a lazy evaluation approach. Lazy evaluation will be used in the functions themselves and decide when we should evaluate it in the OTTR template. The result is that lazy evaluation will ensure that the evaluation of a function only is performed when the function reaches a base template (like ottr:Tripple). Why lazy evaluation is a better approach than eager evaluation, in this case, is that OTTR does not force a user to use all variables in the template, even though OTTR throws a warning. Therefore, using lazy evaluation would mean that we only evaluate functions that OTTR uses. One of the disadvantages of lazy evaluation, as mention earlier, is I/O and error handling. Frog, however, are not supposed to have does feature. 
+Frog utilises lazy evaluation to evaluate its expression. We have chosen to use lazy evaluation to ensure that Frog does not perform unnecessary evaluations. Since Frog is a pure programing language using lazy evaluation is optimal because we know that Frog function always returns the same value for a set of arguments. We chose not to utilise eager evaluation in Frog because Frog does not support I/O and error features. Additionally, using a lazy evaluation approach makes it possible, as previously mentioned, to add features like streams.
 
 \para
-Using lazy evaluation as an evaluation strategy will also add memorization. The reason why lazy evaluating is a good idea, in this case, is that when we have no way of knowing when calling an instance with a function as one of the arguments (if it is not a base template), how many times this value would end up in a base template. Lazy evaluation would then make sure that the function only is evaluated once for this function call and only if the value of the function ever is needed. Additionally, using a lazy evaluation approach will make it possible, as previously mentioned, to add features like streams. 
-
-\subsubsection{Type checking in ottr}
-Even though Frog will use lazy evaluation to evaluate a function call, it will check that the type returned by the function is compatible with the parameter type for that given argument. Meaning that calling a function that returns an xsd:string on an instance that expects an xsd:integer will throw an error. Checking that the type matches is necessary because a base template can have a more general type than the template.  This has to be done at this stage because the base template can be typed more generaly than what the template that makes the instances is, with general meaning that the type in the template of the instance is a subtype of the type in the base template. An excellent example of this is the base template ottr:Triple, which takes in 3 arguments that are ottr:Resources meaning that the arguments can be of any of the other types in the ottr type system since every type is a subtype of ottr:Resource, meaning that checking that the type returned by the function is compatible at this stage could result in a wrong answer. An Alternativ approach, where the type checking also is done when the function reaches a base template, would be to make a wrapper class that contains the function call and the expected type of the argument, and then evaluate that the type matches first when we need to use the function. The reason why this would not be the best approach is that we are not guaranteed that the function reaches a base template at some point, but OTTR throws a type error regardless. To check the typing at this stage will also mean that we will detect errors earlier.
+Furthermore, we have also chosen to use a lazy evaluation approach in the OTTR templates to determine when OTTR should evaluate the function—resulting in OTTR only evaluating a function call when the function call reaches a base template. Why lazy evaluation is a better approach than eager evaluation, in this case, is that OTTR does not force a user to use all variables in the template, even though OTTR throws a warning. Therefore, using lazy evaluation assures us that OTTR only evaluates function calls needed to expand the template.  
 
 \para
-We also want it to be possible to write lambda-functions or anonym functions straight in to the ottr template. Since we want to check that 
-the type returned by the function is compatible with the type that the template expects. This means that we have to be able to evaluate from 
-the lambda function what type it will resolve to be. One methode to do this can be to use the same typing rules that are used in 
-simply typed lambda calculus. The difference between simply typed lambda calculus and Frog lambda functions (for now) is that simply typed 
-lambda calculus have the paramtertypes while Frog won't (because for now frog only set parameter types )  
+Using lazy evaluation as an evaluation strategy also adds, as previously mentioned, memorisation. As previously mentioned, OTTR only evaluates a function call when it reaches a base template—utilising memorisation is then an advantage in OTTR because we do not know how many base templates a function reach. To summarise, lazy evaluation and memorisation assure that OTTR only evaluates a function call once and only if the result of the function is needed.
+
+\subsubsection{Type sytem in Frog}
+\label{types in frog}
+As already stated, Frog uses the same type system as OTTR. Using the same type system is beneficial because OTTR and Frog assure us that the term returned by the function matches the type the OTTR template parameter requires. Frog and OTTR using the same type system is especially important for the OTTR specific types, such as BOT, LUB-types and list-types, since the OTTR specific types may not have an optimal counterpart in another type system.
+
+\para
+Endringer som trengs å gjøres på OTTR sitt type system. Først og fremst en functions type, trenger ikke en function call type da et function call type vil evalure til å være return typen. Muligens skille på anonyme funksjoner og funksjoner med navn.
+
+\para
+NOTE: Muligens dette og den neste avsnittet bør få en egen section
+Even though OTTR and Frog use lazy evaluation, OTTR needs to check that the term returned by the function has the correct type. Since OTTR, as mentioned, throws an error if an argument has the incorrect type. Checking that the type matches is necessary to do at this stage since the base template may use a more general type. A more general type in this sense means that the type is a supertype of the original type. An excellent example is ottr:Triple, where the third parameter has the type top; this means that the third parameter type is compatible with every term since the top type is the supertype of all types. An additional advantage of doing the type checking at this stage is that OTTR detects errors earlier. An alternative approach is to store the function call and the expected type of the argument in an object. As a result of storing the expected type and the function call in an object, OTTR can perform the type checking when the function call reaches a base template. However, this approach is not optimal since OTTR throws a typing error regardless of the function call reaching a base template. 
+
+\para 
+As mentioned, Frog makes it feasible to anonym functions straight into the OTTR template. Anonym functions dose does not state their return type. Since OTTR needs to know the return type of a function call, Frog needs to use some typing rules to determine the return type based on the function body and the parameter type. In contrast to named functions, the anonymous functions do not explicitly state their parameters. Frog solves this by setting the type of the parameters to the same type as the given argument term has. 
 
 \subsubsection{Validation of functions}
-At some point, we need to validate the whole function. For the time being, we have only talked about validating that a functions return type matches OTTRs' expected argument type.  OTTR does some validations before expanding an instance. Such as checking that the syntax is correct. Naturally, Frog will also do some validation before OTTR starts to expand the instances. As OTTR, Frog will also check the syntax in advance. In addition, to validating that every used function in the function receives the correct arguments of the correct type. Meaning that if we have a function that uses a function, add, which takes in two terms of type xsd:integer. Then Frog will validate that the arguments given to add is two terms of type xsd:integer. Furthermore, Frog will also validate that the functions' return type is the same as the returned term.
+At some point, Frog needs to validate the syntax and semantic of a function. For the time being, we have only talked about validating that a function's return type matches the OTTR templates corresponding parameter type.  OTTR does some validations before expanding an instance. Such as checking that the syntax is correct. Naturally, Frog also does some validation before OTTR starts to expand the instances. As OTTR, Frog also checks the syntax in advance. In addition, to validate some parts of the semantic. For instance, Frog validates that every function used in the function receives terms with the correct type. Resulting in that if a function uses a function, add, which takes in two terms of type xsd:integer. Then Frog validates that the two arguments given to add are terms of type xsd:integer. Furthermore, Frog also validates the function, and the function utilised in the function returns a term of the type that they state.
+
+\para
+avsnitt om hvordan Frog skal validere anonyme funksjoner som er brukt inne i 
+
+
+\subsubsection{Termination}
+There are several different ways to guarantee termination. As mention in the section about type theory, 
+it is possible to make a type system for a programming language that guarantees termination. However, this often results in less expressive languages. 
+Another approach is to make a set of base functions that can be used to build a new function, as described in the section about combinatory logic. 
+Where the base functions are guaranteed to terminate. The reason why guaranteed termination would be a nice feature in Frog is that a valid OTTR template guarantees termination. 
+Meaning that if Frog does not guarantee termination, OTTR templates that uses Frog functions can not guarantee it either
+   
 
 \subsubsection{Div}
 PLAN:
@@ -108,12 +120,6 @@ PLAN:
     \item Skrive om hvordan funksjonene skal lages, skal vi bruke en code genrator (ulempe: krever vedlikehold), en for hver type (ulempe: tid krevende. Finnes uendlige mange typer), generisk (kan fungere, da kan f.eks. add -funksjonen bli lagd for den mest generiske typen for tall)
 \end{itemize}
 
-\subsubsection{Termination}
-There are several different ways to guarantee termination. As mention in the section about type theory, 
-it is possible to make a type system for a programming language that guarantees termination. However, this often results in less expressive languages. 
-Another approach is to make a set of base functions that can be used to build a new function, as described in the section about combinatory logic. 
-Where the base functions are guaranteed to terminate. The reason why guaranteed termination would be a nice feature in Frog is that a valid OTTR template guarantees termination. 
-Meaning that if Frog does not guarantee termination, OTTR templates that uses Frog functions can not guarantee it either
 
 \subsection{Alternative approaches}
 In this section, we will propose alternative approaches to Frog.  We group the approaches into two groups.  Firstly, we will consider how we can utilise different semantic technologies, namely SPARQL, OWL, and SWRL,  on the expanded OTTR template to yield the same result compared to Frog in some cases. Additionally, we will propose a way to solve some of the example issues presented in the motivation section using these semantic technologies.  Secondly, we will discuss two different languages for doing computation on RDF, Ripple and RDF, and how these may be an alternative to Frog. 
@@ -184,4 +190,4 @@ that is that the types used in frog matches the types in OTTR (in additon to fro
 the we don't need to transelate types from one type system to another (from the scripting language to OTTR). This means 
 that frog probably will be less error-prone than using a scripting language.
 
-\subsection{Summary}
+\subsection{Summary and Problem Statment}
