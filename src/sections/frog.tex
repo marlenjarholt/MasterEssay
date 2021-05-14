@@ -56,24 +56,8 @@ ex-p:Nina ex-r:hasAge  "6"^^xsd:int ;
 \end{lstlisting}
 
 \subsection{Plans for Frog}
-Frog is a high-order function programming language, only allowing pure functions. Furthermore, Frog utilises RDF for expressing its syntax. We amplify Frog's syntax in section \label{frog syntax}. Frog's goal is to make it feasible to manipulate the terms in the OTTR template body using Frog functions. In addition, Frog has two types of functions, named and anonymous functions. Having anonymous functions makes it possible to write functions straight into the OTTR template body. However, we specify the named functions in another file, and OTTR can then use these functions in the OTTR template body. Since Frog is a part of the OTTR framework, it applies the same type and term system as OTTR. Frog requires that we declare the return type of the function and the parameter types explicitly, meaning that Frog is a typed programming language. We further elaborate on the use of types in Frog in \autoref{types in frog}.
+Frog is a high-order function programming language, only allowing pure functions. Furthermore, Frog utilises RDF for expressing its syntax. Frog's goal is to make it feasible to manipulate the terms in the OTTR template body using Frog functions. In addition, Frog has two types of functions, named and anonymous functions. Having anonymous functions makes it possible to write functions straight into the OTTR template body. However, we specify the named functions in another file, and OTTR can then use these functions in the OTTR template body. Since Frog is a part of the OTTR framework, it applies the same type and term system as OTTR. Frog requires that we declare the return type of the function and the parameter types explicitly, meaning that Frog is a typed programming language. We further elaborate on the use of types in Frog in \autoref{types in frog}.
 
-\subsubsection{Proposed syntax}
-\label{frog syntax}
-Frog's syntax has some properties that needs to be fulfilled: 
-\begin{enumerate}
-    \item The language shall be written in RDF 
-    \item A named function should know its type. Where the type is a combination of the parameter types 
-    and the return type of the function.
-    \item A named function is not a function until the rdf:type is set as an Function
-    \item The body of the function shall be build up by list, like the LISP languages
-\end{enumerate}
-
-\subsubsection{Proposed semantics}
-\begin{enumerate}
-    \item riktig bruke av termer 
-    \item at det funksjonen sier at typen til det en returner faktiks er riktig
-\end{enumerate}
 
 \subsubsection{Evaluation}
 Frog utilises lazy evaluation to evaluate its expressions. We have chosen to use lazy evaluation to ensure that Frog does not perform unnecessary evaluations. Since Frog is a pure programing language using lazy evaluation is optimal because we know that a Frog function always returns the same value from the same set of arguments. We chose not to utilise eager evaluation in Frog because Frog does not support I/O and error features. Additionally, using a lazy evaluation approach makes it possible, as previously mentioned, to add features like streams.
@@ -146,7 +130,7 @@ Like Ripper, one of the problems for using Adenine as an alternative approach is
 \subsubsection{Summarisation}
 To summarise, we have discussed five different approaches to Frog. All of the approaches, except Ripper, have one common disadvantage: they can not do calculations while OTTR expands the templates. The result is that it is impossible to make terms that OTTR needs when expanding, such as making a URI. An additional reason to not use these four approaches is that they modify the graph somehow. However, we do not want to modify the graph, only the terms. Furthermore, both OWL and SWRL has restrictions, meaning that it is impossible to solve some cases utilising only OWL and SWRL. After these disadvantages, we have one approach left, Ripper, but Ripper does not have the same type and term system, leading to difficulties. Using a scripting language may lead to the same difficulties as Ripper regarding the type and term system. 
 
-\begin{table}[h!]
+\begin{table}[ht!]
     \begin{tabular}{|c|c|c|c|c|c|}
         \hline
         & SPARQL & OWL & SWRL & Ripper & Adenine \\ \hline
