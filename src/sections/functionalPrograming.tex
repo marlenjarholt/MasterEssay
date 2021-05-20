@@ -3,16 +3,30 @@
 
 \subsection{(Untyped) Lambda Calculus}
 \label{Lambda Calculus}
-$\lambda$-calculus is a formal system for expressing computation by Alonzo Church. $\lambda$-calculus consists of terms, binding, and substitution over terms. There are three rules to build up new terms:
+Lambda calculus is a collection of formal systems for expression computation and is a basis for functional programming. Alonzo Church introduced lambda calculus in the 1930s and published his first book on the topic in 1941 \autocite{ChurchAlonzo1985Tcol}. Furthermore, lambda calculus is a universal model of computation that can express any computable function, resulting in it being Turing complete. We base the following section on \autocite{RojasRaulLC} and \autocite{nederpelt_geuvers_lc}. 
+
+\subsubsection{Definitions and notations}
+Lambda calculus consists of three primitives symbols: $\lambda$, (, and ). The fundamental concept in lambda calculus is a lambda term, also called an expression. A lambda term may consist of: 
 
 \begin{itemize}
     \item \textbf{Variable}: A name which  is a placeholder for a parameter. A variable $x$ is in itself a lambda term.
-    \item \textbf{Abstraction}: If we have a term $M$ and an variable $x$, then we also have the term $\lambda x.M$ where $x$ is bound in M.
+    \item \textbf{Abstraction}: If we have a term $M$ and an variable $x$, then we also have the term $\lambda x.M$ where $x$ is bound in M. 
     \item \textbf{Application}: If $E_1$ and $E_2$ are lambda terms, then $(E_1 E_2) $ is also a lambda term, where $E_2$ is applied to $E_1$.
 \end{itemize}
 
+Lambda calculs buildes up its $lambda$-terms using these three expressions, which in BNF-syntax can be defined as: 
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{c c c}
+         $\lambda -term$ & $:= $& <variabel> \\
+         & $|$ & <abstraction> \\
+         & $|$ & <application> \\
+    \end{tabular}
+\end{table}
+
 \para
-All functions in $\lambda$-calculus are first-class values, which means that a function can take in a function as an argument. Additionally, a function can take another function, or the same function \footnote{Refering the self-application function ($\lambda f.ff$)}, as a return value. Bear in mind that $\lambda$-calculus is left-associative, which means that $E_1 E_2 E_3 \leftrightarrow E_1 (E_2 E_3)$.
+All functions in $\lambda$-calculus are first-class values, which means that a lambda function can take in a function as an argumnent and returning functions. Bear in mind that $\lambda$-calculus is left-associative, which means that $E_1 E_2 E_3 \leftrightarrow E_1 (E_2 E_3)$.
 
 \para
 In the following sections, refer to \autoref{fig:LC-explenations} for simple visualization of the different parts of a lambda function. 
@@ -22,10 +36,6 @@ In the following sections, refer to \autoref{fig:LC-explenations} for simple vis
     \caption{Visualization of the different parts of a lambda function}
     \label{fig:LC-explenations}
 \end{figure}
-
-
-\subsubsection{Lambda terms}
-We have already explained how to build up terms above, but here we provide some extra information to understand terms better. Firstly, the \emph{abstraction} rule is the rule that defines the anonymous function. Secondly, the abstraction only forms the function and binds the variables; the abstraction does not execute the function. 
 
 \subsubsection{Bound and Free variables}
 As previously mentioned, the \emph{abstraction} sets the \emph{bound variables}. Within the abstraction, if the variable exists in the function body, the $\lambda$ binds this variable to the function body. For example, given the term $\lambda x.xy$, $x$ is a bound variable because: $x$ occurs in the function body, and $\lambda$ binds $x$ to the function body.
@@ -53,6 +63,9 @@ $\beta$-reduction is a way to reduce terms. We reduce terms by sending in argume
 we can $\lambda x. x$  $s \rightarrow _\beta s$ (this is the identity function, which gives us back the argument we gave to the function). We can do $\beta$-reduction in several rounds. When there are no more possible $\beta$-reductions, we say that the term has reached the $\beta$-normal form. \autoref{fig:beta-reduction} shows an example on $\beta$-reduction with a $\lambda$-term of one of the arguments. 
 
 \para
+Futhermore, we say that a term, M, is \emph{$\beta$-equal} to another term, N, if finite $\beta$-reductions on the term M results in the term N. This is often denoted with $M =_{\beta} N$. In \autoref{fig:beta-reduction} the term $\lambda x.\lambda y. xy \; (\lambda z.z) \; a \; b$ is $\beta$-equal to all the terms beneath. 
+
+\para
 If the term stays the same after one $\beta$-reduction, the term will never terminate. An example of a term that does not terminate while using $\beta$-reduction is the self-application function applied on itself $(\lambda f.ff) \lambda f.ff$.
 
 \paragraph{Complexity}
@@ -68,7 +81,7 @@ $\beta$-reduction is not an atomic step; this means that one must locate all occ
 \subsubsection{$\eta$-reduction}
 $\eta$-reduction is the idea that two functions are equal if, and only if, they return the same result for any given argument. An example of $\eta$-reduction is $(\lambda x.f x)  \rightarrow_\eta f$, whenever $x$ is not a free variable in $f$.
 
-\subsubsection{Combinatory logic}
+\subsection{Combinatory logic}
 \label{combinatory logic}
 Combinatory logic in computer science, is a theoretical method of computation. The idea is that we only have some base function to create new high-order functions. From now on, these functions will be called primitive functions. These primitive functions combined in the proper order can then express any other high-order function. Combinatory logic is often looked at as a variant of $\lambda$-calculus, where the lambda expressions are replaced with a limited set of primitive functions that does not have any free variables. 
 The three primitive functions in combinatory logic is \textbf{I}, \textbf{K} and \textbf{S}.

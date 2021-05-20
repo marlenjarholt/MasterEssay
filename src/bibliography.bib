@@ -1,3 +1,45 @@
+%lambda calculus 
+
+@misc{ChurchAlonzo1985Tcol,
+  series = {Annals of mathematics studies},
+  volume = {6},
+  publisher = {Princeton University Press},
+  isbn = {0691083940},
+  year = {1985},
+  title = {The calculi of lambda-conversion},
+  language = {eng},
+  address = {Princeton, N.J},
+  author = {Church, Alonzo},
+}
+
+@article{RojasRaulLC,
+  abstract = {This paper is a concise and painless introduction to the $\lambda$-calculus.
+  This formalism was developed by Alonzo Church as a tool for studying the
+  mathematical properties of effectively computable functions. The formalism
+  became popular and has provided a strong theoretical foundation for the family
+  of functional programming languages. This tutorial shows how to perform
+  arithmetical and logical computations using the $\lambda$-calculus and how to
+  define recursive functions, even though $\lambda$-calculus functions are
+  unnamed and thus cannot refer explicitly to themselves.},
+  year = {2015},
+  title = {A Tutorial Introduction to the Lambda Calculus},
+  copyright = {http://arxiv.org/licenses/nonexclusive-distrib/1.0},
+  language = {eng},
+  author = {Rojas, Raul},
+  keywords = {Computer Science - Logic in Computer Science},
+}
+
+@inbook{nederpelt_geuvers_lc, 
+  place={Cambridge}, 
+  title={Untyped lambda calculus}, 
+  DOI={10.1017/CBO9781139567725.004}, 
+  booktitle={Type Theory and Formal Proof: An Introduction}, 
+  publisher={Cambridge University Press}, 
+  author={Nederpelt, Rob and Geuvers, Herman}, 
+  year={2014}, 
+  pages={1–32},
+}
+
 
 %semantic technologies
 @article{Berner-Lee_The_samantic_web,
@@ -47,7 +89,7 @@
 }
 
 %OTTR
-@InProceedings{SLKF_OTTR,
+@InProceedings{SLKF_OTTR_2018,
     author="Skj{\ae}veland, Martin G.
     and Lupp, Daniel P.
     and Karlsen, Leif Harald
@@ -68,6 +110,19 @@
     pages="477--494",
     abstract="Reasonable Ontology Templates () is a language for representing ontology modelling patterns in the form of parameterised ontologies. Ontology templates are simple and powerful abstractions useful for constructing, interacting with, and maintaining ontologies. With ontology templates, modelling patterns can be uniquely identified and encapsulated, broken down into convenient and manageable pieces, instantiated, and used as queries. Formal relations defined over templates support sophisticated maintenance tasks for sets of templates, such as revealing redundancies and suggesting new templates for representing implicit patterns. Ontology templates are designed for practical use; an vocabulary, convenient serialisation formats for the semantic web and for terse specification of template definitions and bulk instances are available, including an open source implementation for using templates. Our approach is successfully tested on a real-world large-scale ontology in the engineering domain.",
     isbn="978-3-030-00671-6"
+}
+
+@article{SLKK_OTTR_2021,
+  author          = "Skj{\ae}veland, Martin G.
+    and Lupp, Daniel P.
+    and Karlsen, Leif Harald
+    and Klüwe, Johan W",
+  title           = {OTTR: Formal Templates for Pattern-Based
+Ontology Engineering},
+  journal         = {X},
+  volume          = {X},
+  number          = {X},
+  year            = {X}
 }
 
 @online{OTTR_mOTTR,
@@ -109,4 +164,66 @@
     year        = "2004",
     type        = "",
     institution = "W3C",
+}
+
+@TechReport{SHACL,
+  author      = "Dimitris Kontokostas and Holger Knublauch",
+  title       = "Shapes Constraint Language ({SHACL})",
+  month       = jul,
+  note        = "https://www.w3.org/TR/2017/REC-shacl-20170720/",
+  year        = "2017",
+  bibsource   = "https://w2.syronex.com/jmr/w3c-biblio",
+  type        = "{W3C} Recommendation",
+  institution = "W3C",
+}
+
+@article{Lupp_tliam,
+    abstract = {Data in engineering industries is highly standardized and information-dense, and usually distributed across many different sources with incompatible formats and implicit semantics. As such, it provides an ideal use case for application of semantic technologies for data integration and access. However, adoption of semantic technologies is hampered due to the complex set of competencies required to construct a scalable and maintainable ontology. We present a methodology for aiding domain experts and ontology engineers in constructing and maintaining industry-viable ontologies using a template-based approach for ontology modeling and instantiation. Using the OTTR framework, the structure of the input formats and the semantics of the target domain are modeled and maintained in separate modularized template libraries. Data provided by domain experts is mapped to these templates, allowing end-users to extend and amend the model without the need to directly interact with semantic technology languages and tools.Our approach is demonstrated on a real-world use case from the asset maintenance domain which has applicability to a wide range of industries.},
+    publisher = {Technical University of Aachen},
+    year = {2020},
+    title = {Template Libraries for Industrial Asset Maintenance: A Methodology for Scalable and Maintainable Ontologies},
+    author = {Lupp, Daniel P. and Hodkiewicz, Melinda and Skjæveland, Martin G},
+    pages = {50},
+}
+
+@inproceedings{ShinavierJoshua_FPLD,
+    issn = {1613-0073},
+    volume = {248},
+    booktitle = {CEUR Workshop Proceedings},
+    year = {2007},
+    title = {Functional programs as linked data},
+    copyright = {Copyright 2013 Elsevier B.V., All rights reserved.},
+    language = {eng},
+    author = {Shinavier, Joshua},
+}
+
+@article{Adenine,
+  author          = {Huynh, David and Karger, David and Quan, Dennis},
+  title           = {Haystack: A Platform for Creating, Organizing and Visualizing
+Information Using RDF},
+  journal         = {},
+  volume          = {},
+  number          = {},
+  year            = {2002}
+}
+
+@Inbook{TypeTermination,
+  author="Barthe, Gilles
+  and Gr{\'e}goire, Benjamin
+  and Riba, Colin",
+  editor="Bove, Ana
+  and Barbosa, Lu{\'i}s Soares
+  and Pardo, Alberto
+  and Pinto, Jorge Sousa",
+  title="A Tutorial on Type-Based Termination",
+  bookTitle="Language Engineering and Rigorous Software Development: International LerNet ALFA Summer School 2008, Piriapolis, Uruguay, February 24 - March 1, 2008, Revised Tutorial Lectures",
+  year="2009",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="100--152",
+  abstract="Type-based termination is a method to enforce termination of recursive definitions through a non-standard type system that introduces a notion of size for inhabitants of inductively defined types. The purpose of this tutorial is to provide a gentle introduction to a polymorphically typed $\lambda$-calculus with type-based termination, and to the size inference algorithm which is used to guarantee automatically termination of recursive definitions.",
+  isbn="978-3-642-03153-3",
+  doi="10.1007/978-3-642-03153-3_3",
+  url="https://doi.org/10.1007/978-3-642-03153-3_3",
+  pages= {100-101},
 }
