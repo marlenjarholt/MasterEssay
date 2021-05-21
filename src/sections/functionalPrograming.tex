@@ -165,14 +165,16 @@ $\textbf{C=(S(S(K(S(K S)K))S)(K K))}$\\
 
 \subsection{Type theory}
 \label{type theory}
-Type theory is the academic study of \emph{type systems}, which gives every term a type. The type determines the meaning, and which operations are possible to perform on a term. Lambda Calculus has its own type system, also made by Alonzo Church called \emph{Simply Typed Lambda Calculus}, which we discuss in \autoref{Simply Typed Lambda Calculus}.
+Type theory is the academic study of \emph{type systems}, which gives every term a type. B.Jackobs \autocite[2]{JacobsBart1999Clat} states that the use of types is to classify values. The type determines the meaning and which operations are possible to perform on a term. Lambda Calculus has its own type system, also made by Alonzo Church called \emph{Simply Typed Lambda Calculus}, which we discuss in \autoref{Simply Typed Lambda Calculus}.
+
+\para 
+B.Jackobs \autocite[3]{JacobsBart1999Clat} distinguished between three basic kinds of type theory: Simply type theory (STT), dependent type theory (DDT), and polymorphic type theory (PPT).  What differentiates the different type systems are their indexing of types.
 
 \para
 \emph{A term} is often followed by a : and then the type of the term. \emph{A type} in a type system is semantically a collection of different values that a term can be evaluated to be. Therefore, there are many similarities between type systems and set theory, although they have their differences. Furthermore, the name of a given term is syntactic. For example, in java, where we have a type that is a collection of all Integers ($\mathbb{Z}$) (semantic) and has the name int (syntactic). Consequently, a term $e$ ($e$ is often used to denote a term) is of type $\tau$ ($\tau$ is often used to denote a type) if $e \in \tau$. E.g. 2 is of type $\mathbb{N}$ (natural numbers) because $2 \in \mathbb{N}$. Making new types depends on the type systems' set of base types and type constructors, often called the \emph{inductive types} of a type system. An example type system with the base type $\sigma$, two type constructors $*$ and $\#$, and two types $M$ and $N$, makes it possible to make a new type $T$ as shown in \autoref{tab:inductive types}. 
 
 \para
-Many of the programming languages using type systems either require that all expressions terminate (e.g. Coq) or allow infinite loops but are inconsistent when viewed as logics (e.g. Haskel) \textbf{(src: http://www.tyconmismatch.com/papers/combining-TR.pdf)}.
-Therefore in some programming languages like \nameref{Simply Typed Lambda Calculus}, one of the type systems goals is to make sure that a term terminates. 
+Many of the programming languages using type systems either require that all expressions terminate (e.g. Coq) or allow infinite loops but are inconsistent when viewed as logics (e.g. Haskel) \textbf{(src: http://www.tyconmismatch.com/papers/combining-TR.pdf)}. Therefore in some programming languages like \nameref{Simply Typed Lambda Calculus}, one of the type systems goals is to make sure that a term terminates. 
 
 \begin{table}[]
     \centering
@@ -186,16 +188,18 @@ Therefore in some programming languages like \nameref{Simply Typed Lambda Calcul
 \end{table}
 
 
-\subsubsection{Decision problems}
-Type theory uses type checking, typability and type inhabitation as decisions problems. These decision problems uses judgments, which are denoted with $\Upgamma \vdash e:\tau$. Where $\Upgamma$ is the denotation which is usually used for a context or environment. A terms' type is determined using the judgment and equivalences type inference rules. 
+\subsubsection{Type checking and type finding}
+Type checking and other forms of decision problems in type systems often use judgments. The notation or judgment  $\Upgamma \vdash e:\tau$ states that the term $e$ has the type $\tau$ in the environment $\Upgamma$. There exist several common problems concerning type systems, also called decision problems in type systems. Berendregt et al. defines the following five decision problems in their book Lambda Calculus with Types \autocite{nederpelt_geuvers_lc}: \footnote{We have taken the decision problems from the book, but we have made some changes to use the same vocabulary as we have explained in this section
+}
 
-\para
-The decision problem of \textbf{checking} (abbreviated by ($\Upgamma\vdash e : \tau$?) is:\\
-\textit{Given a type environment $\Upgamma$, a term $e$, and a type $\tau$, decide whether the term $e$ can be assigned the type $\tau$ in the type environment $\Upgamma$} \\ \\
-The decision problem of type \textbf{typability} (abbreviated by ($ \exists \Upgamma,\tau .\Upgamma\vdash e : \tau$?) is: \\ 
-\textit{Given  a term $e$, decide wheter there exists a type environment $\Upgamma$ and a type $\tau$ such that the term $e$ can be assigned the type $\tau$ in the type environment $\Upgamma$} \\ \\ 
-The decision problem of type \textbf{inhabitation} (abbreviated by ($ \exists e.\Upgamma \vdash e : \tau$?) is: \\
-\textit{Given a type environment $\Upgamma$ and a type $\tau$, decide whether there exists a term $e$ that can be assigned the type $\tau$ in the type environment $\Upgamma$}
+\begin{enumerate}
+    \item Given a type environment $\Upgamma$, a term $e$ and a type $\tau$, the problem of type checking consist of determining wheter $\Upgamma\vdash e : \tau$($\Upgamma\vdash e : \tau ?$).
+    \item The problem of typabiliry consists of determining, for a given term $e$, wheter $e$ has some type with respect to a typing environment $\Upgamma$ ($ \exists \Upgamma,\tau .\Upgamma\vdash e : \tau ?$).
+    \item The problem of type reconstruction or finding types, consists of finding all possible types $\tau$ and bases $\Upgamma$ that type a given $e$ ($ ? \vdash e : ?$).
+    \item The inhabitation problem consists of finding out whether a given type $\tau$ is inhabited by some term $e$ in the type envoirment ($\Upgamma$ $ \exists e.\Upgamma \vdash e : \tau?$).
+    \item The enumeration problem consists of determining, for a given type $\tau$ and a given type envoirment $\Upgamma$, all possible terms $e$ such that $\Upgamma\vdash e : \tau$ ($\Upgamma\vdash ? : \tau ?$).
+
+\end{enumerate}
 
 \subsection{Simply Typed Lambda Calculus}
 \label{Simply Typed Lambda Calculus}
