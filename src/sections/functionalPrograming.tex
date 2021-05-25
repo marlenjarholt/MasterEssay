@@ -3,30 +3,30 @@
 
 \subsection{(Untyped) Lambda Calculus}
 \label{Lambda Calculus}
-Lambda calculus is a collection of formal systems for expression computation and is a basis for functional programming. Alonzo Church introduced lambda calculus in the 1930s and published his first book on the topic in 1941 \autocite{ChurchAlonzo1985Tcol}. Furthermore, lambda calculus is a universal model of computation that can express any computable function, resulting in it being Turing complete. We base the following section on \autocite{RojasRaulLC} and \autocite{nederpelt_geuvers_lc}. 
+Lambda calculus is a collection of formal systems for expressing computation and is a basis for functional programming. Alonzo Church introduced lambda calculus in the 1930s and published his first book on the topic in 1941 \autocite{ChurchAlonzo1985Tcol}. Furthermore, lambda calculus is a universal model of computation that can express any computable function, resulting in it being Turing complete. We base the following section on \autocite{RojasRaulLC} and \autocite{nederpelt_geuvers_lc}. 
 
 \subsubsection{Definitions and notations}
-Lambda calculus consists of three primitives symbols: $\lambda$, (, and ). The fundamental concept in lambda calculus is a lambda term, also called an expression. A lambda term may consist of: 
+Lambda calculus consists of three primitives symbols: $\lambda$, (, and )\lhk{and a set of variables?}. The fundamental concept in lambda calculus is a lambda term, also called an expression. A lambda term may consist of: 
 
 \begin{itemize}
     \item \textbf{Variable}: A name which  is a placeholder for a parameter. A variable $x$ is in itself a lambda term.
-    \item \textbf{Abstraction}: If we have a term $M$ and an variable $x$, then we also have the term $\lambda x.M$ where $x$ is bound in M. 
-    \item \textbf{Application}: If $E_1$ and $E_2$ are lambda terms, then $(E_1 E_2) $ is also a lambda term, where $E_2$ is applied to $E_1$.
+    \item \textbf{Abstraction}: If we have a term $M$ and an variable $x$, then we also have the term $\lambda x.M$ where \lhk{we say that }$x$ is bound in M. \lhk{Also state that $\lambda xy.M$ is short for $\lambda x . \lambda y . M$?}
+    \item \textbf{Application}: If $E_1$ and $E_2$ are lambda terms, then $(E_1 E_2) $ is also a lambda term, where \lhk{we say that }$E_2$ is applied to $E_1$. \lhk{State that we omitt parenthesis when the meaing is clear.}
 \end{itemize}
 
-Lambda calculs buildes up its $lambda$-terms using these three expressions, which in BNF-syntax can be defined as: 
+Lambda calculus builds up its $lambda$-terms using these three expressions, which in BNF-syntax can be defined as: \lhk{perhaps write out the full BNF}
 
 \begin{table}[ht!]
     \centering
     \begin{tabular}{c c c}
-         $\lambda -term$ & $:= $& <variabel> \\
+         $\lambda -term$ & $:= $& <variable> \\
          & $|$ & <abstraction> \\
          & $|$ & <application> \\
     \end{tabular}
 \end{table}
 
 \para
-All functions in $\lambda$-calculus are first-class values, which means that a lambda function can take in a function as an argumnent and returning functions. Bear in mind that $\lambda$-calculus is left-associative, which means that $E_1 E_2 E_3 \leftrightarrow E_1 (E_2 E_3)$.
+All functions in $\lambda$-calculus are first-class values, which means that a lambda function can take a function as an argumnent and return functions. Bear in mind that $\lambda$-calculus is left-associative, which means that $E_1 E_2 E_3 \leftrightarrow E_1 (E_2 E_3)$\lhk{Move this up to application, as this is only relevant when we omitt parenthesis. Also, it seems that you later on assume $E_1 E_2 E_3 \leftrightarrow (E_1 E_2) E_3$. E.g.~$\lambda xy.xy\ a\ b$ is equivalent to $((\lambda xy.xy)\ a)\ b$ and not $(\lambda xy.xy)\ (a\ b)$?}.
 
 \para
 In the following sections, refer to \autoref{fig:LC-explenations} for simple visualization of the different parts of a lambda function. 
@@ -48,25 +48,25 @@ then the \emph{free variables} in $E_1 E_2$, $F_1 F_2$ equals $ (V_1\setminus B_
 In other words, the set of free variables in the term $E_1 E_2$ is the union of the free variables in $E_1$ and $E_2$.
 
 \subsubsection{$\alpha$-conversion}
-To explain $\alpha$-conversion, one needs to understand what \emph{$\alpha$ equivalence} is. In short, two lambda terms are $\alpha$-equivalent if the only difference in the terms has the variables' names. E.g $\lambda ab.ab$ is alpha-equivalent to the lambda term $\lambda xy.xy$ 
+To explain $\alpha$-conversion, one needs to understand what \emph{$\alpha$ equivalence} is\lhk{Remove this sentence or rephrase to something like "Before we can define ... we need to introduce ..."}. In short, two lambda terms are $\alpha$-equivalent if the only difference in the terms has the variables' names. E.g.~$\lambda ab.ab$ is alpha-equivalent to the lambda term $\lambda xy.xy$ 
 
 \para
 With $\alpha$-equivalent in mind, \emph{$\alpha$-conversion} is a way to change a variable name in both the $\lambda$ part and the function body while keeping the new term $alpha$ equivalent to the old term. E.g. $\alpha$-conversion of $\lambda ab.ab$ is $\lambda xy.xy$ since these are $alpha$ equivalent. Bear in mind that changing a variable name to an already existing variable name in the term is not allowed, because the result would change the meaning and thus the two terms would not be $alpha$ equivalent.
 
 \para
-As we have already mentioned, when doing $\alpha$-conversion, we can only change the names of the variables in the term so that the term does not change its meaning. 
-E.g., $\lambda x.x \rightarrow_\alpha \lambda y.y$ since we have not changed the meaning of this term. The result of sending in any value/term $e$ will give us the same return value, in this case, just $e$ itself. An example of what is not allowed to do is this $\lambda x.xy \rightarrow_\alpha \lambda y.yy$, as these terms will give us different return values for an argument. Let us try with $e$ again; then we would see that  $\lambda x.xy e$ would give us $ey$ while $\lambda y.yy e$ would give us $ee$, and $ey \neq ee$. So the term $\lambda x.xy$ is $\alpha$-equivalent to all terms where we change to $x$ to anything except $y$. We can generally change any variable name to anything except the set of variables in the function body. Therefore $\lambda x.xy \rightarrow_\alpha \lambda z.zy$. Besides, we need to make sure that we only changes the variables that are in the same abstraction. So the term $\lambda x.\lambda x.x $ is not $\alpha$-equivalent to the 
+\lhk{The following sentences are a bit repetitious, prehaps rewrite?} As we have already mentioned, when doing $\alpha$-conversion, we can only change the names of the variables in the term so that the term does not change its meaning. 
+E.g., $\lambda x.x \rightarrow_\alpha \lambda y.y$ since we have not changed the meaning of this term. The result of sending in any value/term $e$ will give us the same return value, in this case, just $e$ itself. An example of what is not allowed to do is this $\lambda x.xy \rightarrow_\alpha \lambda y.yy$, as these terms will give us different return values for an argument. Let us try with $e$ again; then we would see that  $\lambda x.xy e$ \lhk{Use parenthesis to disambiguate here, i.e. $(\lambda x.xy) e$} would give us $ey$ while $\lambda y.yy e$ would give us $ee$, and $ey \neq ee$. So the term $\lambda x.xy$ is $\alpha$-equivalent to all terms where we change $x$ to anything except $y$. We can generally change any variable name to anything except the set of variables in the function body. Therefore $\lambda x.xy \rightarrow_\alpha \lambda z.zy$. Besides, we need to make sure that we only changes the variables that are in the same abstraction. So the term $\lambda x.\lambda x.x $ is not $\alpha$-equivalent to the 
 term $\lambda y.\lambda x.y$, but to for example the terms $\lambda y.\lambda x.x$ or $\lambda x.\lambda y.y$.
 
 \subsubsection{$\beta$-reduction}
-$\beta$-reduction is a way to reduce terms. We reduce terms by sending in argument(s) for the bound variables. E.g., if we want to reduce the lambda term $\lambda x. x s$, 
+$\beta$-reduction is a way to reduce terms. We reduce terms by sending in argument(s) for the bound variables. E.g., if we want to reduce the lambda term $\lambda x. x s$ \lhk{use parenthesis to disambiguate}, 
 we can $\lambda x. x$  $s \rightarrow _\beta s$ (this is the identity function, which gives us back the argument we gave to the function). We can do $\beta$-reduction in several rounds. When there are no more possible $\beta$-reductions, we say that the term has reached the $\beta$-normal form. \autoref{fig:beta-reduction} shows an example on $\beta$-reduction with a $\lambda$-term of one of the arguments. 
 
 \para
 Futhermore, we say that a term, M, is \emph{$\beta$-equal} to another term, N, if finite $\beta$-reductions on the term M results in the term N. This is often denoted with $M =_{\beta} N$. In \autoref{fig:beta-reduction} the term $\lambda x.\lambda y. xy \; (\lambda z.z) \; a \; b$ is $\beta$-equal to all the terms beneath. 
 
 \para
-If the term stays the same after one $\beta$-reduction, the term will never terminate. An example of a term that does not terminate while using $\beta$-reduction is the self-application function applied on itself $(\lambda f.ff) \lambda f.ff$.
+\lhk{Perhaps start this paragraph by stating that $\beta$-reduction need not terminate, and make it clear that terms staying the same after a single $\beta$-reduction step are not the only examples of non-terminating terms.} If the term stays the same after one $\beta$-reduction, the term will never terminate. An example of a term that does not terminate while using $\beta$-reduction is the self-application function applied on itself $(\lambda f.ff) \lambda f.ff$.
 
 \paragraph{Complexity}
 $\beta$-reduction is not an atomic step; this means that one must locate all occurrences of a bound variable in a term, which can be very time-consuming. In O-notation, this will take $O(n)$ time for a term of length n. Also, storing all of these occurrences may become costly in regards to storage. 
@@ -83,7 +83,7 @@ $\eta$-reduction is the idea that two functions are equal if, and only if, they 
 
 \subsection{Combinatory logic}
 \label{combinatory logic}
-Combinatory logic in computer science, is a theoretical method of computation. The idea is that we only have some base function to create new high-order functions. From now on, these functions will be called primitive functions. These primitive functions combined in the proper order can then express any other high-order function. Combinatory logic is often looked at as a variant of $\lambda$-calculus, where the lambda expressions are replaced with a limited set of primitive functions that does not have any free variables. 
+Combinatory logic in computer science, is a theoretical method\lhk{rather "theory"?} of computation. The idea is that we only have\lhk{rather "introduce"?} some base function to create new high-order functions. From now on, these functions will be called primitive functions. These primitive functions combined in the proper order can then express any other high-order function. Combinatory logic is often looked at as a variant of $\lambda$-calculus, where the lambda expressions are replaced with a limited set of primitive functions that does not have any free variables. 
 The three primitive functions in combinatory logic is \textbf{I}, \textbf{K} and \textbf{S}.
 \\ \\
 Where \textbf{I} is the identity function, defined by: \\ 
@@ -119,7 +119,7 @@ From these primitive functions and a variable $x$, we can build up combinatoric 
          & $|$ & $P$ & (the primitive functions) \\
          & $|$ & $E_1 E_1$ & (application, where $E_1$ and $E_2$ are combinatoric terms)\\
     \end{tabular}
-    \caption{How to build up combinatoric terms}
+    \caption{How to build up combinatoric terms \lhk{perhaps remove the bar before the last column and make all columns left-adjusted instead of centered. It is also common to place captions above tables (and below figures), however perhaps this should rather be a figure?}}
     \label{tab:makeCombinatoricTerms}
 \end{table}
 
@@ -152,8 +152,8 @@ In consequence, $T[\lambda x.y]$ we write $T[\lambda x.y] =_{3/1} (\textbf{K } y
     $=_{3/1} (\textbf{S} \; (\textbf{S} \; (\textbf{K S}) \; (\textbf{S} \; (\textbf{K K}) \; T.[\lambda x.\textbf{x}]) ) \; (\textbf{K I}))$ \\
     $=_4 (\textbf{S} \; (\textbf{S} \; (\textbf{K S}) \; (\textbf{S} \; (\textbf{K K}) \; \textbf{I}) ) \; (\textbf{K I}))$ \\      
 \end{quote}
-It is common to add the combinatory terms \textbf{B} ($(\textbf{C} f g x) = ((f x )g)$) 
-and \textbf{C} ($(\textbf{C} f g x) = (f (x g))$). \textbf{C} performes substitution on the the first term, and \textbf{B} on the second term, in contrast to \textbf{S} which performs substitution on both terms. These two terms can now be added to the transformation, $T[]$:
+It is common to add the combinatory terms \textbf{B} (\lhk{defined as }$(\textbf{C} f g x) = ((f x )g)$) 
+and \textbf{C} (\lhk{defined as }$(\textbf{C} f g x) = (f (x g))$). \textbf{C} performes substitution on the the first term, and \textbf{B} on the second term, in contrast to \textbf{S} which performs substitution on both terms. These two terms can now be added to the transformation, $T[]$:
 \begin{enumerate}
     \setcounter{enumi}{6}
     \item $T[\lambda x.(E_1 E_2)] \Rightarrow (\textbf{C} \; T[\lambda x.E_1] \; T[E_2]))$ (if x is free in $E_1$ but not in $E_2$)
@@ -165,13 +165,13 @@ $\textbf{C=(S(S(K(S(K S)K))S)(K K))}$\\
 
 \subsection{Type theory}
 \label{type theory}
-Type theory is the academic study of \emph{type systems}, which gives every term a type. B.Jackobs \autocite[2]{JacobsBart1999Clat} states that the use of types is to classify values. The type determines the meaning and which operations are possible to perform on a term. Lambda Calculus has its own type system, also made by Alonzo Church called \emph{Simply Typed Lambda Calculus}, which we discuss in \autoref{Simply Typed Lambda Calculus}. B.Jackobs \autocite[3]{JacobsBart1999Clat} distinguished between three basic kinds of type theory: Simply type theory (STT), dependent type theory (DDT), and polymorphic type theory (PPT).  What differentiates the different type systems are their indexing of types.
+Type theory is the academic study of \emph{type systems}, which gives every term a type. B.~Jackobs \autocite[2]{JacobsBart1999Clat} states that the use of types is to classify values. The type determines the meaning and which operations are possible to perform on a term. Lambda Calculus has its own type system, also made by Alonzo Church called \emph{Simply Typed Lambda Calculus}, which we discuss in \autoref{Simply Typed Lambda Calculus}. B.~Jackobs \autocite[3]{JacobsBart1999Clat} distinguished between three basic kinds of type theory: Simply type theory (STT), dependent type theory (DDT), and polymorphic type theory (PPT).  What differentiates the different type systems are their indexing of types\lhk{Perhaps either elaborate more on what "indexing" means, or drop the sentence}.
 
 \para
-\emph{A term} is often followed by a : and then the type of the term. \emph{A type} in a type system is semantically a collection of different values that a term can be evaluated to be. Therefore, there are many similarities between type systems and set theory, although they have their differences. Furthermore, the name of a given term is syntactic. For example, in java, where we have a type that is a collection of all Integers ($\mathbb{Z}$) (semantic) and has the name int (syntactic). Consequently, a term $e$ ($e$ is often used to denote a term) is of type $\tau$ ($\tau$ is often used to denote a type) if $e \in \tau$. E.g. 2 is of type $\mathbb{N}$ (natural numbers) because $2 \in \mathbb{N}$. Making new types depends on the type systems' set of base types and type constructors, often called the \emph{inductive types} of a type system. An example type system with the base type $\sigma$, two type constructors $*$ and $\#$, and two types $M$ and $N$, makes it possible to make a new type $T$ as shown in \autoref{tab:inductive types}.
+\lhk{Rewrite this to define how terms are types, e.g.~"We write $M : T$, for a term $M$ and type $T$, to state that $M$ has type $T$"}\emph{A term} is often followed by a : and then the type of the term. \emph{A type} in a type system is semantically a collection of different values that a term can be evaluated to be. Therefore, there are many similarities between type systems and set theory, although they have their differences. Furthermore, the name of a given term is syntactic. For example, in java, where we have a type that is a collection of all Integers ($\mathbb{Z}$) (semantic) and has the name int (syntactic). Consequently, a term $e$ ($e$ is often used to denote a term) is of type $\tau$ ($\tau$ is often used to denote a type) if $e \in \tau$\lhk{not quite correct, as there is a difference between a type and its interpretation as a set. Perhaps introduce an interpretation-function $I$, and state something like $e : \tau$ if $e \in \tau^I$)} E.g. 2 is of type $\mathbb{N}$ (natural numbers) because $2 \in \mathbb{N}$. Making new types depends on the type systems' set of base types and type constructors, often called the \emph{inductive types} of a type system. An example type system with the base type $\sigma$, two type constructors $*$ and $\#$, and two types $M$ and $N$, makes it possible to make a new type $T$ as shown in \autoref{tab:inductive types}. \lhk{Perhaps rather define the set of types using $\to$, as done in simply typed lambda calculus, e.g. $a \to b$.}
 
 \para
-Many of the programming languages using type systems either require that all expressions terminate (e.g. Coq) or allow infinite loops but are inconsistent when viewed as logics (e.g. Haskel) \textbf{(src: http://www.tyconmismatch.com/papers/combining-TR.pdf)}. Therefore in some programming languages like \nameref{Simply Typed Lambda Calculus}, one of the type systems goals is to make sure that a term terminates. 
+Many of the programming languages using type systems either require that all expressions terminate (e.g. Coq) or allow infinite loops but are inconsistent when viewed as logics\lhk{the connection to logics is not introduced} (e.g. Haskell) \textbf{(src: http://www.tyconmismatch.com/papers/combining-TR.pdf)}\lhk{perhaps rather add as footnote}. Therefore in some programming languages like \nameref{Simply Typed Lambda Calculus}, one of the type systems goals is to make sure that a term terminates\lhk{perhaps explicitly state that with termination we here mean $\beta$-reduction termination}.
 
 \begin{table}[]
     \centering
@@ -186,12 +186,12 @@ Many of the programming languages using type systems either require that all exp
 
 
 \subsubsection{Type checking and type finding}
-Type checking and other forms of decision problems in type systems often use judgments. The notation or judgment  $\Upgamma \vdash e:\tau$ states that the term $e$ has the type $\tau$ in the environment $\Upgamma$. There exist several common problems concerning type systems, also called decision problems in type systems. Berendregt et al. defines the following five decision problems in their book Lambda Calculus with Types \autocite{nederpelt_geuvers_lc}: \footnote{We have taken the decision problems from the book, but we have made some changes to use the same vocabulary as we have explained in this section
+Type checking and other forms of decision problems in type systems often use judgments. The notation or judgment  $\Upgamma \vdash e:\tau$ states that the term $e$ has the type $\tau$ in the environment $\Upgamma$. There exist several common problems concerning type systems, also called decision problems in type systems. Berendregt et al.~\lhk{use a tilde ($\sim$) instead of whitespace after dot not terminating a sentence} defines the following five decision problems in their book Lambda Calculus with Types \autocite{nederpelt_geuvers_lc}: \footnote{We have taken the decision problems from the book, but we have made some changes to use the same vocabulary as we have explained in this section
 }
 
 \begin{enumerate}
     \item Given a type environment $\Upgamma$, a term $e$ and a type $\tau$, the problem of type checking consist of determining wheter $\Upgamma\vdash e : \tau$($\Upgamma\vdash e : \tau ?$).
-    \item The problem of typabiliry consists of determining, for a given term $e$, wheter $e$ has some type with respect to a typing environment $\Upgamma$ ($ \exists \Upgamma,\tau .\Upgamma\vdash e : \tau ?$).
+    \item The problem of typability consists of determining, for a given term $e$, whether $e$ has some type with respect to a typing environment $\Upgamma$ ($ \exists \Upgamma,\tau .\Upgamma\vdash e : \tau ?$).
     \item The problem of type reconstruction or finding types, consists of finding all possible types $\tau$ and bases $\Upgamma$ that type a given $e$ ($ ? \vdash e : ?$).
     \item The inhabitation problem consists of finding out whether a given type $\tau$ is inhabited by some term $e$ in the type envoirment ($\Upgamma$ $ \exists e.\Upgamma \vdash e : \tau?$).
     \item The enumeration problem consists of determining, for a given type $\tau$ and a given type envoirment $\Upgamma$, all possible terms $e$ such that $\Upgamma\vdash e : \tau$ ($\Upgamma\vdash ? : \tau ?$).
@@ -203,13 +203,13 @@ Type checking and other forms of decision problems in type systems often use jud
 As we mention in \autoref{type theory}, Simply Typed Lambda Calculus($\lambda^\rightarrow$) is a Type Theory for lambda-calculus. We base this section on Nederpelt and Geuvers book \autocite{nederpelt_geuvers_2014} regarding this topic. 
 
 \para
-Giving a lambda term a type in simply typed lambda calculus begins with providing the variables of their types.  There are two different approaches to providing variables with their type. Firstly, \emph{typing à la Church} also named \emph{explicitly typing}, where we state that type of the variable when introducing it. Secondly, \emph{typing à la Curry}, which does not give parameters when introduced but leaves them open to some extent. The types of the parameters are often then given from a search process, including some qualified guessing. We will use the à la Church approche.
+Giving a lambda term a type in simply typed lambda calculus begins with providing the variables of their\lhk{remove "of their"} types.  There are two different approaches to providing variables with their type. Firstly, \emph{typing à la Church} also named \emph{explicitly typing}, where we state that type of the variable when introducing it. Secondly, \emph{typing à la Curry}, which does not give \lhk{types to?} parameters\lhk{is there a difference between "parameter" and "variable"?} when introduced but leaves them open to some extent. The types of the parameters are often then given from a search process, including some qualified guessing. We will use the à la Church approach.
 
 \para
 In $\lambda^\rightarrow$, we can make types with only one constructor $\rightarrow$ and a set of base types, frequently denoted with a $B$. Thus, we can construct new types from the base types, $B$, combined with constructor $\rightarrow$. Using base types $\tau$ and $\sigma$, for instance, make it possible to construct type $\tau \rightarrow \sigma$. $\tau \rightarrow \sigma$ refers to a function that takes in a term of type $\tau$ and returns a term of type $\sigma$, such as: $\lambda x:\tau. y \; \tau \rightarrow \sigma$. 
 
 \para
-The syntax for Simply Typed Lambda Calculus is almost identical to Lambda Calculus, with the difference being that we need to define the variables' type in the abstraction. Simply Typed Lambda Calculus similarly specifies the variables' type as in type theory, with $x:\tau$ for a variable $x$ with type $\tau$. In addition, Simply typed lambda calculus adds a set of term constants for the base types, often denoted with a $c$. \autoref{tab:STLC syntax} shows the complete syntax for Simply Typed Lambda Calculus.
+The syntax for Simply Typed Lambda Calculus is almost identical to Lambda Calculus, with the difference being that we need to define the variables' type in the abstraction. Simply Typed Lambda Calculus similarly specifies the variables' type as in type theory, with $x:\tau$ for a variable $x$ with type $\tau$. In addition, Simply typed lambda calculus adds a set of term constants for the base types, often denoted with a $c$. \autoref{tab:STLC syntax} shows the complete syntax for Simply Typed Lambda Calculus.\lhk{Maybe also add a similar table for types, even though they would only be base types and $a \to b$}
 
 
 \begin{table}[]
@@ -235,7 +235,7 @@ Simply Typed Lambda Calculus has four typing rules. To state these rules, Simply
 \end{enumerate}
 
 \subsubsection{Reduction of Simply Typed Lambda Calculus}
-Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as \autoref{Lambda Calculus} mention. Additionally, the reduction needs to check that the arguments to the function have the right type in typing environment. 
+Simply Typed Lambda Calculus also uses the $\beta$-reduction and $\eta$-reduction as \autoref{Lambda Calculus} mention. Additionally, the reduction needs to check that the arguments to the function have the right type in the typing environment. 
 
 \para
 To give an example of $\beta$-reduction, we first need to make a set of the base types. In this case, we only use $Int$, the collection of all-natural numbers. From $Int$, it is possible to make an unlimited set of types, such as $Int$, $Int \rightarrow Int$, $Int \rightarrow Int \rightarrow Int$. For the sake of this example, we add the operation $+$ that adds two numbers together. We use the term $e_1:= \lambda x:Int\: y:Int. + x y:Int \rightarrow Int \rightarrow Int$. The type $Int \rightarrow Int \rightarrow Int$ is a term that takes in an Int and returns a term that takes in an $Int$ and returns an $Int$. Applying $e_2 := 3:Int$ with the third typing rule on the term $e_1$, $e_1 e_2$ results in the term $e_1 e_2$ with the type $Int \rightarrow Int$. This type describes a term that taks in a Int and returns a Int, which we can be prove using $\beta$-reduction on the term:
@@ -258,7 +258,7 @@ Evaluation strategy has two main strategies \emph{eager evaluation} (strict eval
 Most Imperative programming languages use eager evaluation because it is easy to avoid unexpected behaviour and conduct debugging compared to non-strict evaluation. It may be challenging to use imperative features like I/O and exception handling when using a non-strict evaluation strategy due to state handling. Although most imperative languages use eager evaluation, they often utilise some non-strict evaluation methods. An excellent example of this is the if-statement. In most languages, the if-statement only evaluates the part of the statement that is true. For instance, the pseudo-code, $if\; a\; then\; b\; else\; c$, will only evaluate $b$ if $a$ evaluates to be true. $c$, on the other hand, will only be evaluated if $a$ is false. However, suppose the if-statement is put into a function and use $a$, $b$, and $c$ as arguments, like $f(a, b,c):= \; if\; a\; then\; b\; else\; c$. In that case, the eager evaluation evaluates all the expressions before running the function; despite that, the programming language only needs to evaluate either $b$ or $c$. While non-strict evaluation, on the other hand, only evaluates the used expressions.
 
 \para
-\emph{Lazy evaluation}, also known as call-by-need, is a type of non-strict evaluation often used by functional programming. The result of lazy evaluation being a type of non-strict evaluation is that lazy evaluation evaluates the expression when used. What separates lazy evaluation from the other types of non-strict evaluation, such as call-by-name, is that lazy evaluation also uses memorisation to avoid repeated evaluations.  Memorisation uses a look-up table where the evaluated value of a function for some given arguments is stored.  When lazy evaluation evaluates an expression, it first checks if the expression already exists in the look-up table. If the value exists, lazy evaluation retrieves the value from the table. However, if the value is not present in the look-up table, lazy evaluation evaluates the function to a value and appends this value to the table. 
+\emph{Lazy evaluation}, also known as call-by-need, is a type of non-strict evaluation often used by functional programming. The result of lazy evaluation being a type of non-strict evaluation is that lazy evaluation evaluates the expression when used. What separates lazy evaluation from the other types of non-strict evaluation, such as call-by-name, is that lazy evaluation also uses memorisation to avoid repeated evaluations.  Memorisation uses a look-up table where the evaluated value of a function for some given arguments is stored.  When lazy evaluation evaluates an expression, it first checks if the expression already exists in the look-up table. If the value exists, lazy evaluation retrieves the value from the table. However, if the value is not present in the look-up table, lazy evaluation evaluates the function to a value and appends this value to the table. \lhk{Perhaps state that this is only possible to use in purely functional languages}
 
 \para
 \autoref{fig:strictVSLazy} is an example of strict evaluation and lazy evaluation with b-reduction. Note the following significant differences between these two approaches in this example:
@@ -278,10 +278,10 @@ Most Imperative programming languages use eager evaluation because it is easy to
 \end{figure}
 
 \subsection{Practical use of functional programming}
-\emph{Functional programming} is a programming paradigm that is made by applying and composing functions. Furthermore, functional programming is inspired by Lambda Calculus definitions. First off, functional programming uses high-order functions, which are functions that can take in functions as arguments and also return a function. In other words, functional programming allows functions to be both an argument and a return value of a function. High-order functions in functional programming enable partial application, also called currying, a technique where every argument to a function is applied sequentially. Partial application applies the function to its argument where each application makes a new function that accepts the next argument.
+\emph{Functional programming} is a programming paradigm that is made by applying and composing functions. Furthermore, functional programming is inspired by Lambda Calculus definitions. First off, functional programming uses high-order functions, which are functions that can take in functions as arguments and also return a function. In other words, functional programming allows functions to be both an argument and a return value of a function. High-order functions in functional programming enable partial application, also called currying, a technique where every argument to a function is applied sequentially. Partial application applies the function to its argument where each application makes a new function that accepts the next argument. \lhk{Is should be "higher-order" in place of "high-order"}
 
 \para
-Some well known high-order functions are map and filter. Map takes a list and a transformation function and returns a new list. Furthermore, map applies the transformation function on each element and adds the result of each transformation to the new list. On the other hand, the filter function takes in a list and a function and applies a subset of the original list to the new list. The filter requires that this transformation function returns a boolean, which indicates if the filter should include the current element in the new list.
+Some well known high-order functions are map and filter. Map takes a list and a transformation function and returns a new list. Furthermore, map applies the transformation function on each element and adds the result of each transformation to the new list. On the other hand, the filter function takes in a list and a function and applies a subset of the original list to the new list. The filter requires that this transformation function returns a boolean, which indicates if the filter should include the current element in the new list.\lhk{Perhaps give the types of map and filter and an example?}
 
 \para
 Two other important concepts in functional programming are \emph{pure function} and \emph{recursion}. Pure functions are functions without any side effects. The result of using a pure function, among other things, is that the same set of arguments always yields the same return value. A programming language that does not allow any side effects is called a pure programming language. A pure functional programming language will only accept functions without any side effects, resulting in only pure functions. Therefore, it is optimal to use memorisation because we know, as mentioned, that the same set of arguments given to a function always produces the same return value. On the contrary, using memoisation in an impure programming language may be unreliable since it is possible that calling the same function multiple times may not yield the same return value. 
