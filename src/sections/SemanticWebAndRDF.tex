@@ -78,7 +78,7 @@ Secondly, we can make lists by using collections. The main difference between a 
     \item rdf:rest: linking us to the rest of the list
     \item rdf:nil: end of the list
 \end{itemize}
-\autoref{fig:containerAndCollection} visualises the differences between containers and collections. In Turtle, we can use () as an abbreviation for writing collections where we put the collection elements inside the (). In the general case, a collection will look like this \lstinline{(member_1 \;member_2 .... member_n)}. An RDF graph containing Sebastian's ancestors using a collection ends up looking like this:
+\autoref{fig:containerAndCollection} visualises the differences between containers and collections. In Turtle, we can use () as an abbreviation for writing collections where we put the collection elements inside the (). In the general case, a collection will look like this \lstinline{(member_1 member_2 .... member_n)}. An RDF graph containing Sebastian's ancestors using a collection ends up looking like this:
 
 \begin{lstlisting}[frame=single, language=turtle]
 ex-p:Sebastian ex-r:hasFather ex-p:Thommas, [ ex-r:hasFather ex-p:Roger] ; 
