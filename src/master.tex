@@ -21,10 +21,13 @@
 \usepackage{tikz}
 \usepackage{tablefootnote}
 \newcommand{\para}{\vspace{1.25\baselineskip}\noindent}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{listings}
 
 
-%\newcommand{\lhk}[1]{\textcolor{red}{[#1]}}
-\newcommand{\lhk}[1]{}
+\newcommand{\lhk}[1]{\textcolor{red}{[#1]}}
+%\newcommand{\lhk}[1]{}
 
 \addbibresource{bibliography.bib}
 
@@ -47,6 +50,15 @@
     %numberstyle=\color{black},
     morestring=[b][\color{black}]\",
     backgroundcolor=\color{white},
+}
+
+\lstset{showstringspaces=false,
+basicstyle=\ttfamily,
+%keepspaces=true,
+breaklines=true,
+columns=fixed,
+keywordstyle=\color{keywordcolor},
+commentstyle=\color{gray}
 }
 
 \newcommand{\greencheck}{{\color{green}\checkmark}}
